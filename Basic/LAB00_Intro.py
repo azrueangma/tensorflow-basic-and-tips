@@ -2,7 +2,8 @@
 import tensorflow as tf
 
 #create tensor op
-hello_str_tensor = tf.constant(dtype = tf.string, value = "Hello", name = "hello_str_tensor")
+hello_str_tensor = tf.constant(dtype = tf.string, value = "Hello", shape = [],
+                               name = "hello_str_tensor")
 
 #session
 with tf.Session() as sess:
