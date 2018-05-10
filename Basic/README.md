@@ -2,4 +2,6 @@
 
 
 ## LAB01-1 LinearRegression
-<img src = 'image/LAB01-1_LinearRegression.jpg' height = '1000px'> 
+<p align="center">
+<img src = 'image/LAB01-1_LinearRegression.jpg' height = '500px'> 
+</p>
