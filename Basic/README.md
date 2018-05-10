@@ -1,5 +1,5 @@
-# tensorflow-generative-model-collections
-##basic tensorflow
+# basic tesnorflow
 
-##LAB01-1
-<img src = 'image/LAB01-1_LinearRegression.jpg' height = '230px'> 
+
+## LAB01-1 LinearRegression
+<img src = 'image/LAB01-1_LinearRegression.jpg' height = '1000px'> 
