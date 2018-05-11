@@ -1,6 +1,6 @@
 # basic tesnorflow
 
-## lab01-1 linear_regression
+## regression
 
 lab01-1 | lab01-5
 :---: | :---: 
