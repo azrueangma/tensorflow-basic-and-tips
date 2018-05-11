@@ -1,7 +1,7 @@
 # basic tesnorflow
 
 
-## LAB01-1 LinearRegression
+## lab01-1 linear_regression
 <p align="center">
-<img src = 'image/LAB01-1_LinearRegression.jpg' height = '800px'> 
+<img src = 'image/lab01-1_linear_regression.jpg' height = '800px'> 
 </p>
