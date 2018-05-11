@@ -5,13 +5,13 @@ import basic_utils
 import shutil
 import os
 
+NPOINTS = 1000
+TOTAL_EPOCH = 1000
+
 def create_weight_variable(shape):
     W = tf.get_variable(name = 'W', shape = shape, dtype = tf.float32, initializer= tf.truncated_normal_initializer())
     b = tf.get_variable(name = 'b', shape = shape, dtype = tf.float32, initializer= tf.constant_initializer(0.0))
     return W, b
-
-NPOINTS = 1000
-TOTAL_EPOCH = 1000
 
 dataX, dataY = basic_utils.generate_data_for_linear_regression(NPOINTS)
 
