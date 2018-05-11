@@ -8,6 +8,11 @@ import os
 NPOINTS = 1000
 TOTAL_EPOCH = 1000
 
+def create_weight_variable(shape):
+    W = tf.get_variable(name = 'W', shape = shape, dtype = tf.float32, initializer= tf.truncated_normal_initializer())
+    b = tf.get_variable(name = 'b', shape = shape, dtype = tf.float32, initializer= tf.constant_initializer(0.0))
+    return W, b
+
 dataX, dataY = basic_utils.generate_data_for_linear_regression(NPOINTS)
 
 tf.set_random_seed(0)
@@ -15,8 +20,7 @@ tf.set_random_seed(0)
 X = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'X')
 Y = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'Y')
 
-W = tf.Variable(tf.truncated_normal(shape = [1]), name = 'W')
-b = tf.Variable(tf.zeros([1]), name = 'b')
+W, b = create_weight_variable([1])
 hypothesis = tf.nn.bias_add(tf.multiply(X, W), b, name = 'hypothesis')
 
 l2_norm = tf.add_n([tf.square(v) for v in tf.trainable_variables() if 'b' in v.name])[0]
