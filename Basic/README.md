@@ -14,4 +14,6 @@ lab02-1 | lab02-2
 
 lab02-3_graph
 :---:
-<img src = 'image/lab02_3_tensorboard_graph.PNG' height = '200px' width = '500px'> 
+</p> center
+<img src = 'image/lab02_3_tensorboard_graph.PNG' height = '500px' width = '300px'> 
+<p> 
