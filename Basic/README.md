@@ -13,7 +13,6 @@ lab02-1 | lab02-2
 <img src = 'image/lab02_1_tensorboard_basic_usages.PNG' height = '200px' width = '500px'> |<img src = 'image/lab02_2_tensorboard_var_scope.PNG' height = '200px' width = '500px'> 
 
 lab02-3_graph
-:---:
-</p> center
-<img src = 'image/lab02_3_tensorboard_graph.PNG' height = '500px' width = '300px'> 
-<p> 
+<table align='center'>
+<td><img src = 'image/lab02_3_tensorboard_graph.PNG' height = '500px' width = '300px'> 
+</table>
