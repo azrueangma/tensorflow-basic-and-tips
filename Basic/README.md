@@ -16,7 +16,7 @@ lab02-1 | lab02-2
 lab02-3_graph
 :---: 
 <p align="center">
-<img src = 'image/lab02_3_tensorboard_graph.PNG' height = '500px' width = '400px'> 
+<img src = 'image/lab02_3_tensorboard_graph.PNG' height = '550px' width = '400px'> 
 </p>
 
 *Name* | *W1* | *W2* | *W3*
