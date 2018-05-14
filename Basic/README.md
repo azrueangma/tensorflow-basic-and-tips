@@ -10,4 +10,4 @@ lab01-1 | lab01-5
 
 lab02-1 | lab02-2
 :---: | :---: 
-<img src = 'image/lab02_1_tensorboard_basic_usages.PNG' height = '800px'> |<img src = 'image/lab02-2_tensorboard_var_scope.PNG' height = '800px'> 
+<img src = 'image/lab02_1_tensorboard_basic_usages.PNG' height = '300px'> |<img src = 'image/lab02_2_tensorboard_var_scope.PNG' height = '300px'> 
