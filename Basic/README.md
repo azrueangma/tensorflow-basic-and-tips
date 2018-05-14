@@ -26,5 +26,5 @@ Weight | <img src = 'image/lab02_3_tensorboard_w1.PNG' height = '200px' width = 
 lab02-5_graph
 :---: 
 <p align="center">
-<img src = 'image/lab02_5_tensorboard_many_models.PNG' height = '200px' width = '600px'> 
+<img src = 'image/lab02_5_many_models.PNG' height = '200px' width = '600px'> 
 </p>
