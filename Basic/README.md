@@ -21,4 +21,4 @@ lab02-3_graph
 
 *Name* | *W1* | *W2* | *W3*
 :---: | :---: | :---: | :---: |
-Weight | <img src = 'image/lab02_3_tensorboard_w1.PNG' height = '100px' width = '200px'> | <img src = 'image/lab02_3_tensorboard_w2.PNG' height = '100px' width = '200px'> | <img src = 'image/lab02_3_tensorboard_w3.PNG' height = '100px' width = '200px'> 
+Weight | <img src = 'image/lab02_3_tensorboard_w1.PNG' height = '200px' width = '300px'> | <img src = 'image/lab02_3_tensorboard_w2.PNG' height = '200px' width = '300px'> | <img src = 'image/lab02_3_tensorboard_w3.PNG' height = '200px' width = '300px'> 
