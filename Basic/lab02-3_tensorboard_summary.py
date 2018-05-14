@@ -6,6 +6,9 @@ import basic_utils
 import shutil
 import os
 
+NPOINTS = 1000
+TOTAL_EPOCH = 100
+
 def linear(x, output_dim, with_W, name):
     with tf.variable_scope(name):
         W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, initializer= tf.truncated_normal_initializer())
@@ -25,9 +28,6 @@ def sigmoid_linear(x, output_dim, with_W, name):
             return h, W
         else:
             return h
-
-NPOINTS = 1000
-TOTAL_EPOCH = 100
 
 dataX, dataY = basic_utils.generate_data_for_linear_regression(NPOINTS)
 
