@@ -8,6 +8,7 @@ import os
 
 NPOINTS = 1000
 TOTAL_EPOCH = 100
+BOARD_PATH = "./board/lab02-3_board"
 
 def linear(x, output_dim, with_W, name):
     with tf.variable_scope(name):
@@ -54,7 +55,9 @@ merged = tf.summary.merge_all()
 
 init_op = tf.global_variables_initializer()
 with tf.Session() as sess:
-    writer = tf.summary.FileWriter("./board/lab02-3_board")
+    if os.path.exists(BOARD_PATH):
+        shutil.rmtree(BOARD_PATH)
+    writer = tf.summary.FileWriter(BOARD_PATH)
     writer.add_graph(sess.graph)
     sess.run(init_op)
     for epoch in range(TOTAL_EPOCH):
