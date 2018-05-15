@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
-import basic_utils
+import load_data
 import shutil
 import time
 import os
@@ -55,7 +55,7 @@ with tf.device('/gpu:{}'.format(GPU_DEVICE)):
     merged = tf.summary.merge_all()
 
 with tf.device('/cpu:{}'.format(CPU_DEVICE)):
-    dataX, dataY = basic_utils.generate_data_for_linear_regression(NPOINTS)
+    dataX, dataY = load_data.generate_data_for_linear_regression(NPOINTS)
 
     config=tf.ConfigProto(allow_soft_placement=True)
     config.gpu_options.allow_growth = True
