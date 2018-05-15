@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
-import basic_utils
+import load_data
 import shutil
 import os
 
@@ -13,7 +13,7 @@ def create_weight_variable(shape):
 NPOINTS = 1000
 TOTAL_EPOCH = 1000
 
-dataX, dataY = basic_utils.generate_data_for_linear_regression(NPOINTS)
+dataX, dataY = load_data.generate_data_for_linear_regression(NPOINTS)
 
 tf.set_random_seed(0)
 
