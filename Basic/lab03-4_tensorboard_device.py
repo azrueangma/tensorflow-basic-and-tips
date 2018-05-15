@@ -11,7 +11,7 @@ NPOINTS = 100000
 TOTAL_EPOCH = 100
 CPU_DEVICE = 0
 GPU_DEVICE = 0
-BOARD_PATH = "./board/lab02-4_board"
+BOARD_PATH = "./board/lab03-4_board"
 
 def linear(x, output_dim, with_W, name):
     with tf.variable_scope(name):
