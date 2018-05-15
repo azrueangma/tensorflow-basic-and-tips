@@ -8,7 +8,7 @@ import os
 
 NPOINTS = 1000
 TOTAL_EPOCH = 100
-BOARD_PATH = "./board/lab02-5_board"
+BOARD_PATH = "./board/lab03-5_board"
 if os.path.exists(BOARD_PATH):
     shutil.rmtree(BOARD_PATH)
 
