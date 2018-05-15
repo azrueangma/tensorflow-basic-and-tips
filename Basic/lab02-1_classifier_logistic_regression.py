@@ -3,7 +3,7 @@ import numpy as np
 import load_data
 
 NPOINTS = 1000
-TOTAL_EPOCH = 1000
+TOTAL_EPOCH = 10000
 
 dataX, dataY = load_data.generate_data_for_two_class_classification(NPOINTS)
 
@@ -29,18 +29,18 @@ with tf.Session() as sess:
 
     for epoch in range(TOTAL_EPOCH):
         a, l, _ = sess.run([ accuracy, loss, optim], feed_dict={X: dataX, Y: dataY})
-        if (epoch+1) %100 == 0:
+        if (epoch+1) %1000 == 0:
             print("Epoch [{:3d}/{:3d}], loss = {:.6f}, accuracy = {:.2%}".format(epoch + 1, TOTAL_EPOCH, l, a))
 
 '''
-Epoch [100/1000], loss = 0.551494, accuracy = 75.80%
-Epoch [200/1000], loss = 0.541093, accuracy = 77.40%
-Epoch [300/1000], loss = 0.531392, accuracy = 78.05%
-Epoch [400/1000], loss = 0.522310, accuracy = 78.95%
-Epoch [500/1000], loss = 0.513776, accuracy = 79.60%
-Epoch [600/1000], loss = 0.505731, accuracy = 80.25%
-Epoch [700/1000], loss = 0.498122, accuracy = 80.90%
-Epoch [800/1000], loss = 0.490904, accuracy = 81.45%
-Epoch [900/1000], loss = 0.484038, accuracy = 81.85%
-Epoch [1000/1000], loss = 0.477491, accuracy = 82.45%
+Epoch [1000/10000], loss = 0.477491, accuracy = 82.45%
+Epoch [2000/10000], loss = 0.424556, accuracy = 86.30%
+Epoch [3000/10000], loss = 0.385662, accuracy = 88.75%
+Epoch [4000/10000], loss = 0.354860, accuracy = 90.25%
+Epoch [5000/10000], loss = 0.329532, accuracy = 91.70%
+Epoch [6000/10000], loss = 0.308235, accuracy = 92.70%
+Epoch [7000/10000], loss = 0.290052, accuracy = 93.50%
+Epoch [8000/10000], loss = 0.274342, accuracy = 94.20%
+Epoch [9000/10000], loss = 0.260637, accuracy = 94.50%
+Epoch [10000/10000], loss = 0.248580, accuracy = 94.70%
 '''
