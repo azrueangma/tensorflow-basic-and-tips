@@ -2,7 +2,7 @@ import tensorflow as tf
 import shutil
 import os
 
-BOARD_PATH = './board/lab02_2_board'
+BOARD_PATH = './board/lab03_2_board'
 
 a = tf.constant(value = 3, dtype = tf.float32, shape = [], name = 'a')
 b = tf.constant(value = 5, dtype = tf.float32, shape = [], name = 'b')
