@@ -8,7 +8,7 @@ import os
 
 NPOINTS = 1000
 TOTAL_EPOCH = 100
-BOARD_PATH = "./board/lab02-3_board"
+BOARD_PATH = "./board/lab03-3_board"
 
 def linear(x, output_dim, with_W, name):
     with tf.variable_scope(name):
