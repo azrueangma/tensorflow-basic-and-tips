@@ -2,7 +2,7 @@ import tensorflow as tf
 import shutil
 import os
 
-BOARD_PATH = './board/lab02_1_board'
+BOARD_PATH = './board/lab03_1_board'
 
 a = tf.constant(value = 3, dtype = tf.float32, shape = [], name = 'a')
 b = tf.constant(value = 5, dtype = tf.float32, shape = [], name = 'b')
@@ -18,6 +18,6 @@ with tf.Session() as sess:
     print(sess.run(c))
 
 '''
-tensorboard --logdir=lab02_1_board
+tensorboard --logdir=lab03_1_board
 
 '''
