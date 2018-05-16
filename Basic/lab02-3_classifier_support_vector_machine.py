@@ -51,14 +51,14 @@ with tf.Session() as sess:
             print("Epoch [{:3d}/{:3d}], loss = {:.6f}, accuracy = {:.2%}".format(epoch + 1, TOTAL_EPOCH, l, a))
 
 '''
-Epoch [  2/ 20], loss = 6377.812988, accuracy = 84.60%
-Epoch [  4/ 20], loss = 4206.676270, accuracy = 89.80%
-Epoch [  6/ 20], loss = 2788.104248, accuracy = 93.65%
-Epoch [  8/ 20], loss = 1935.793823, accuracy = 95.45%
-Epoch [ 10/ 20], loss = 1292.842407, accuracy = 97.15%
-Epoch [ 12/ 20], loss = 1006.860413, accuracy = 98.05%
-Epoch [ 14/ 20], loss = 982.689331, accuracy = 98.10%
-Epoch [ 16/ 20], loss = 980.883911, accuracy = 98.15%
-Epoch [ 18/ 20], loss = 980.714233, accuracy = 98.15%
-Epoch [ 20/ 20], loss = 980.697021, accuracy = 98.15%
+Epoch [  2/ 20], loss = 6293.590820, accuracy = 84.60%
+Epoch [  4/ 20], loss = 4138.598633, accuracy = 89.80%
+Epoch [  6/ 20], loss = 2738.566650, accuracy = 93.50%
+Epoch [  8/ 20], loss = 1899.675171, accuracy = 95.45%
+Epoch [ 10/ 20], loss = 1270.909668, accuracy = 97.00%
+Epoch [ 12/ 20], loss = 965.788818, accuracy = 98.05%
+Epoch [ 14/ 20], loss = 937.067688, accuracy = 98.05%
+Epoch [ 16/ 20], loss = 934.864502, accuracy = 98.15%
+Epoch [ 18/ 20], loss = 934.588196, accuracy = 98.15%
+Epoch [ 20/ 20], loss = 934.490845, accuracy = 98.15%
 '''
