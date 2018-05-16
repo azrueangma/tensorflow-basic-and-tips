@@ -33,7 +33,7 @@ l2_norm = tf.reduce_sum(tf.square(W),axis=0, name = 'l2_norm')
 const = tf.constant(C,name="c")
 tmp =  tf.subtract(1., tf.multiply(logits, Y))
 hinge_loss = tf.reduce_sum(tf.maximum(tf.zeros_like(tmp),tmp), name = 'l2_hinge_loss')
-loss = tf.add(tf.multiply(const,hinge_loss),l2_norm,'loss')
+loss = tf.add(tf.multiply(const,hinge_loss),0.5*l2_norm,'loss')
 optim = tf.train.GradientDescentOptimizer(learning_rate = 0.001).minimize(loss)
 
 predict = tf.cast(logits>0.0, tf.int32)
