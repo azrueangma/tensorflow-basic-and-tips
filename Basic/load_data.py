@@ -1,4 +1,12 @@
 import numpy as np
+from sklearn.datasets import load_digits
+
+def MinMaxScale(x):
+    col_min = np.min(x, axis = 0)
+    col_max = np.max(x, axis = 0)
+    denominator = (col_max - col_min) + 1e-7
+    numerator = x - col_min
+    return numerator/denominator
 
 def generate_data_for_linear_regression(npoints):
     for i in range(npoints):
@@ -33,3 +41,13 @@ def generate_data_for_two_class_classification(npoints):
     trainX = np.expand_dims(vectors[:, 0], axis=1)
     trainY = np.expand_dims(vectors[:, 1], axis=1)
     return trainX, trainY.astype(int)
+
+def generate_data_for_multi_class_classification(seed=0, scaling = False):
+    digits = load_digits()
+    trainX = digits['data']
+    if scaling == True:
+        trainX = MinMaxScale(trainX)
+    trainY = digits['target']
+    np.random.seed(seed)
+    mask = np.random.permutation(len(trainX))
+    return trainX[mask], np.expand_dims(trainY[mask], axis=1)
