@@ -87,12 +87,14 @@ h1 = sigmoid_linear(X, 8, 'FC_Layer1')
 h2 = sigmoid_linear(h1, 10, 'FC_Layer2')
 logits = linear(h2, NCLASS, 'FC_Layer3')
 
-hypothesis = tf.nn.softmax(logits, name = 'hypothesis')
-loss = -tf.reduce_sum(Y_one_hot*tf.log(hypothesis), name = 'loss')
-optim = tf.train.GradientDescentOptimizer(learning_rate = 0.001).minimize(loss)
+with tf.variable_scope("Optimization"):
+    hypothesis = tf.nn.softmax(logits, name = 'hypothesis')
+    loss = -tf.reduce_sum(Y_one_hot*tf.log(hypothesis), name = 'loss')
+    optim = tf.train.GradientDescentOptimizer(learning_rate = 0.001).minimize(loss)
 
-predict = tf.argmax(hypothesis, axis=1)
-accuracy = tf.reduce_sum(tf.cast(tf.equal(predict, tf.argmax(Y_one_hot, axis = 1)), tf.float32))
+with tf.variable_scope("Pred_and_Acc"):
+    predict = tf.argmax(hypothesis, axis=1)
+    accuracy = tf.reduce_sum(tf.cast(tf.equal(predict, tf.argmax(Y_one_hot, axis = 1)), tf.float32))
 
 with tf.variable_scope("Summary"):
     avg_loss = tf.placeholder(tf.float32)
