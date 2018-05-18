@@ -31,3 +31,7 @@ lab03-5_graph
 <p align="center">
 <img src = 'image/lab03_5_many_models.PNG' height = '350px' width = '1000px'> 
 </p>
+
+lab04-4 
+:---: 
+<img src = 'image/lab04_4_minibatch.PNG' height = '300px' width = '700px'> 
