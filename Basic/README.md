@@ -14,7 +14,7 @@ lab01-6 | lab01-7
 
 lab03-1 | lab03-2
 :---: | :---: 
-<img src = 'image/lab03_1_tensorboard_basic_usages.PNG' height = '150px' width = '500px'> |<img src = 'image/lab03_2_tensorboard_var_scope.PNG' height = '200px' width = '500px'> 
+<img src = 'image/lab03_1_tensorboard_basic_usages.PNG' height = '200px' width = '500px'> |<img src = 'image/lab03_2_tensorboard_var_scope.PNG' height = '150px' width = '500px'> 
 
 lab03-3_graph
 :---: 
