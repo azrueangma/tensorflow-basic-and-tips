@@ -29,3 +29,10 @@ print("The number of total samples : ", nsamples)
 print("The number of train samples : ", ntrain)
 print("The number of validation samples : ", nvalidation)
 print("The number of test samples : ", ntest)
+
+'''
+The number of total samples :  10992
+The number of train samples :  7694
+The number of validation samples :  1099
+The number of test samples :  2199
+'''
