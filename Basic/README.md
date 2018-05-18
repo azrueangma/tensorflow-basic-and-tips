@@ -32,7 +32,9 @@ lab03-5_graph
 <img src = 'image/lab03_5_many_models.PNG' height = '350px' width = '1000px'> 
 </p>
 
-lab04-4 
+## tensorboard
+
+lab04-4 average of losses and accuracies per Epoch
 :---: 
 <p align="center">
 <img src = 'image/lab04_4_minibatch.PNG' height = '250px' width = '700px'> 
