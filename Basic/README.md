@@ -32,7 +32,7 @@ lab03-5_graph
 <img src = 'image/lab03_5_many_models.PNG' height = '350px' width = '1000px'> 
 </p>
 
-## tensorboard
+## Data manipulation
 
 lab04-4 average of losses and accuracies per Epoch
 :---: 
