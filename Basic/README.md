@@ -34,4 +34,6 @@ lab03-5_graph
 
 lab04-4 
 :---: 
-<img src = 'image/lab04_4_minibatch.PNG' height = '300px' width = '700px'> 
+<p align="center">
+<img src = 'image/lab04_4_minibatch.PNG' height = '200px' width = '700px'> 
+</p>
