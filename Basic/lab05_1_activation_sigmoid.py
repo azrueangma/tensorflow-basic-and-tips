@@ -6,7 +6,7 @@ import shutil
 import load_data
 import time
 
-x_train, x_validation, x_test, y_train, y_validation, y_test = load_data.load_pendigits(seed = 0, scaling = False)
+x_train, x_validation, x_test, y_train, y_validation, y_test = load_data.load_pendigits(seed = 0, scaling = True)
 
 
 BOARD_PATH = "./board/lab05-1_board"
@@ -110,16 +110,16 @@ with tf.Session() as sess:
 
 '''
 Total step :  309
-Epoch [100/1000], train loss = 0.107168, train accuracy = 74.74%, valid loss = 0.149838, valid accuracy = 95.91%, duration = 0.101970(s)
-Epoch [200/1000], train loss = 0.070729, train accuracy = 75.71%, valid loss = 0.127059, valid accuracy = 96.54%, duration = 0.113910(s)
-Epoch [300/1000], train loss = 0.043970, train accuracy = 76.75%, valid loss = 0.104553, valid accuracy = 97.54%, duration = 0.116916(s)
-Epoch [400/1000], train loss = 0.056585, train accuracy = 76.12%, valid loss = 0.096404, valid accuracy = 97.54%, duration = 0.094630(s)
-Epoch [500/1000], train loss = 0.033803, train accuracy = 77.05%, valid loss = 0.083343, valid accuracy = 97.73%, duration = 0.102124(s)
-Epoch [600/1000], train loss = 0.033513, train accuracy = 77.06%, valid loss = 0.080589, valid accuracy = 98.18%, duration = 0.096635(s)
-Epoch [700/1000], train loss = 0.030553, train accuracy = 77.10%, valid loss = 0.099599, valid accuracy = 97.63%, duration = 0.097726(s)
-Epoch [800/1000], train loss = 0.028425, train accuracy = 77.07%, valid loss = 0.095364, valid accuracy = 97.63%, duration = 0.102007(s)
-Epoch [900/1000], train loss = 0.025027, train accuracy = 77.22%, valid loss = 0.074595, valid accuracy = 98.18%, duration = 0.096232(s)
-Epoch [1000/1000], train loss = 0.029096, train accuracy = 77.08%, valid loss = 0.082387, valid accuracy = 97.82%, duration = 0.102157(s)
-Duration for train : 102.972912(s)
+Epoch [100/1000], train loss = 0.105183, train accuracy = 75.61%, valid loss = 0.128921, valid accuracy = 97.27%, duration = 0.096675(s)
+Epoch [200/1000], train loss = 0.055720, train accuracy = 76.70%, valid loss = 0.082163, valid accuracy = 97.82%, duration = 0.095641(s)
+Epoch [300/1000], train loss = 0.039343, train accuracy = 76.96%, valid loss = 0.069400, valid accuracy = 98.09%, duration = 0.113869(s)
+Epoch [400/1000], train loss = 0.031251, train accuracy = 77.11%, valid loss = 0.063873, valid accuracy = 98.18%, duration = 0.096370(s)
+Epoch [500/1000], train loss = 0.026271, train accuracy = 77.28%, valid loss = 0.060640, valid accuracy = 98.18%, duration = 0.094223(s)
+Epoch [600/1000], train loss = 0.022717, train accuracy = 77.38%, valid loss = 0.058144, valid accuracy = 98.45%, duration = 0.129864(s)
+Epoch [700/1000], train loss = 0.020055, train accuracy = 77.40%, valid loss = 0.056109, valid accuracy = 98.36%, duration = 0.096784(s)
+Epoch [800/1000], train loss = 0.017988, train accuracy = 77.47%, valid loss = 0.054491, valid accuracy = 98.45%, duration = 0.100941(s)
+Epoch [900/1000], train loss = 0.016334, train accuracy = 77.52%, valid loss = 0.053205, valid accuracy = 98.45%, duration = 0.095315(s)
+Epoch [1000/1000], train loss = 0.014958, train accuracy = 77.57%, valid loss = 0.052122, valid accuracy = 98.45%, duration = 0.100235(s)
+Duration for train : 107.338806(s)
 <<< Train Finished >>>
 '''
