@@ -17,8 +17,13 @@ BATCH_SIZE = 32
 
 TOTAL_EPOCH = 1000
 
-print("The number of data samples : ", NSAMPLES)
-print("The dimension of data samples : ", INPUT_DIM)
+ntrain = len(x_train)
+nvalidation = len(x_validation)
+ntest = len(x_test)
+
+print("The number of train samples : ", ntrain)
+print("The number of validation samples : ", nvalidation)
+print("The number of test samples : ", ntest)
 
 def linear(x, output_dim, name):
     with tf.variable_scope(name):
@@ -64,7 +69,7 @@ with tf.variable_scope("Summary"):
     merged = tf.summary.merge_all()
 
 init_op = tf.global_variables_initializer()
-total_step = int(NSAMPLES/BATCH_SIZE)
+total_step = int(ntrain/BATCH_SIZE)
 print("Total step : ", total_step)
 with tf.Session() as sess:
     if os.path.exists(BOARD_PATH):
@@ -109,17 +114,17 @@ with tf.Session() as sess:
     print("<<< Train Finished >>>")
 
 '''
-Total step :  309
-Epoch [100/1000], train loss = 0.105183, train accuracy = 75.61%, valid loss = 0.128921, valid accuracy = 97.27%, duration = 0.096675(s)
-Epoch [200/1000], train loss = 0.055720, train accuracy = 76.70%, valid loss = 0.082163, valid accuracy = 97.82%, duration = 0.095641(s)
-Epoch [300/1000], train loss = 0.039343, train accuracy = 76.96%, valid loss = 0.069400, valid accuracy = 98.09%, duration = 0.113869(s)
-Epoch [400/1000], train loss = 0.031251, train accuracy = 77.11%, valid loss = 0.063873, valid accuracy = 98.18%, duration = 0.096370(s)
-Epoch [500/1000], train loss = 0.026271, train accuracy = 77.28%, valid loss = 0.060640, valid accuracy = 98.18%, duration = 0.094223(s)
-Epoch [600/1000], train loss = 0.022717, train accuracy = 77.38%, valid loss = 0.058144, valid accuracy = 98.45%, duration = 0.129864(s)
-Epoch [700/1000], train loss = 0.020055, train accuracy = 77.40%, valid loss = 0.056109, valid accuracy = 98.36%, duration = 0.096784(s)
-Epoch [800/1000], train loss = 0.017988, train accuracy = 77.47%, valid loss = 0.054491, valid accuracy = 98.45%, duration = 0.100941(s)
-Epoch [900/1000], train loss = 0.016334, train accuracy = 77.52%, valid loss = 0.053205, valid accuracy = 98.45%, duration = 0.095315(s)
-Epoch [1000/1000], train loss = 0.014958, train accuracy = 77.57%, valid loss = 0.052122, valid accuracy = 98.45%, duration = 0.100235(s)
-Duration for train : 107.338806(s)
+Total step :  240
+Epoch [100/1000], train loss = 0.135480, train accuracy = 97.15%, valid loss = 0.129101, valid accuracy = 97.27%, duration = 0.077054(s)
+Epoch [200/1000], train loss = 0.071756, train accuracy = 98.58%, valid loss = 0.082227, valid accuracy = 97.82%, duration = 0.077853(s)
+Epoch [300/1000], train loss = 0.050656, train accuracy = 98.91%, valid loss = 0.069411, valid accuracy = 98.09%, duration = 0.082326(s)
+Epoch [400/1000], train loss = 0.040231, train accuracy = 99.10%, valid loss = 0.063853, valid accuracy = 98.18%, duration = 0.082298(s)
+Epoch [500/1000], train loss = 0.033818, train accuracy = 99.31%, valid loss = 0.060603, valid accuracy = 98.18%, duration = 0.077818(s)
+Epoch [600/1000], train loss = 0.029243, train accuracy = 99.44%, valid loss = 0.058099, valid accuracy = 98.45%, duration = 0.082568(s)
+Epoch [700/1000], train loss = 0.025817, train accuracy = 99.47%, valid loss = 0.056065, valid accuracy = 98.36%, duration = 0.081960(s)
+Epoch [800/1000], train loss = 0.023157, train accuracy = 99.56%, valid loss = 0.054449, valid accuracy = 98.45%, duration = 0.103644(s)
+Epoch [900/1000], train loss = 0.021029, train accuracy = 99.62%, valid loss = 0.053167, valid accuracy = 98.45%, duration = 0.081173(s)
+Epoch [1000/1000], train loss = 0.019258, train accuracy = 99.69%, valid loss = 0.052087, valid accuracy = 98.45%, duration = 0.076566(s)
+Duration for train : 83.300618(s)
 <<< Train Finished >>>
 '''
