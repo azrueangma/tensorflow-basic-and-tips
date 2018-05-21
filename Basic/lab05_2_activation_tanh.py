@@ -6,8 +6,7 @@ import shutil
 import load_data
 import time
 
-x_train, x_validation, x_test, y_train, y_validation, y_test = load_data.load_pendigits(seed = 0, scaling = False)
-
+x_train, x_validation, x_test, y_train, y_validation, y_test = load_data.load_pendigits(seed = 0, scaling = True)
 
 BOARD_PATH = "./board/lab05-2_board"
 NSAMPLES = int(len(x_train)+len(x_test))
