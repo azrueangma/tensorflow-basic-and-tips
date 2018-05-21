@@ -8,7 +8,7 @@ import time
 
 x_train, x_validation, x_test, y_train, y_validation, y_test = load_data.load_pendigits(seed = 0, scaling = True)
 
-BOARD_PATH = "./board/lab05-3_board"
+BOARD_PATH = "./board/lab05-2_board"
 NSAMPLES = int(len(x_train)+len(x_test))
 INPUT_DIM = np.size(x_train, 1)
 NCLASS = len(np.unique(y_train))
@@ -28,35 +28,33 @@ def linear(x, output_dim, name):
     with tf.variable_scope(name):
         W = tf.get_variable(name='W', shape=[x.get_shape()[-1], output_dim], dtype=tf.float32,
                             initializer=tf.truncated_normal_initializer())
-        b = tf.get_variable(name='b', shape=[output_dim], dtype=tf.float32,
-                            initializer=tf.constant_initializer(0.0))
-        h = tf.nn.bias_add(tf.matmul(x, W), b, name='h')
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
+        h = tf.nn.bias_add(tf.matmul(x, W), b, name = 'h')
         return h
 
-def relu_linear(x, output_dim, name):
+def tanh_linear(x, output_dim, name):
     with tf.variable_scope(name):
         W = tf.get_variable(name='W', shape=[x.get_shape()[-1], output_dim], dtype=tf.float32,
                             initializer=tf.truncated_normal_initializer())
-        b = tf.get_variable(name='b', shape=[output_dim], dtype=tf.float32,
-                            initializer=tf.constant_initializer(0.0))
-        h = tf.nn.relu(tf.nn.bias_add(tf.matmul(x, W), b), name='h')
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
+        h = tf.nn.tanh(tf.nn.bias_add(tf.matmul(x, W), b), name = 'h')
         return h
 
 tf.set_random_seed(0)
 
 with tf.variable_scope("Inputs"):
-    X = tf.placeholder(shape=[None, INPUT_DIM], dtype=tf.float32, name='X')
-    Y = tf.placeholder(shape=[None, 1], dtype=tf.int32, name='Y')
-    Y_one_hot = tf.reshape(tf.one_hot(Y, NCLASS), [-1, NCLASS], name='Y_one_hot')
+    X = tf.placeholder(shape = [None, INPUT_DIM], dtype = tf.float32, name = 'X')
+    Y = tf.placeholder(shape = [None, 1], dtype = tf.int32, name = 'Y')
+    Y_one_hot = tf.reshape(tf.one_hot(Y, NCLASS), [-1, NCLASS], name = 'Y_one_hot')
 
-h1 = relu_linear(X, 32, 'FC_Layer1')
-h2 = relu_linear(h1, 16, 'FC_Layer2')
+h1 = tanh_linear(X, 32, 'FC_Layer1')
+h2 = tanh_linear(h1, 16, 'FC_Layer2')
 logits = linear(h2, NCLASS, 'FC_Layer3')
 
 with tf.variable_scope("Optimization"):
-    hypothesis = tf.nn.softmax(logits, name='hypothesis')
-    loss = -tf.reduce_sum(Y_one_hot * tf.log(hypothesis), name='loss')
-    optim = tf.train.GradientDescentOptimizer(learning_rate=0.001).minimize(loss)
+    hypothesis = tf.nn.softmax(logits, name = 'hypothesis')
+    loss = -tf.reduce_sum(Y_one_hot*tf.log(hypothesis), name = 'loss')
+    optim = tf.train.GradientDescentOptimizer(learning_rate = 0.001).minimize(loss)
 
 with tf.variable_scope("Pred_and_Acc"):
     predict = tf.argmax(hypothesis, axis=1)
@@ -113,6 +111,7 @@ with tf.Session() as sess:
     train_duration = train_end_time - train_start_time
     print("Duration for train : {:.6f}(s)".format(train_duration))
     print("<<< Train Finished >>>")
+
 '''
 Epoch [100/1000], train loss = 0.036254, train accuracy = 99.28%, valid loss = 0.075746, valid accuracy = 98.00%, duration = 0.080682(s)
 Epoch [200/1000], train loss = 0.021690, train accuracy = 99.51%, valid loss = 0.067876, valid accuracy = 98.18%, duration = 0.076836(s)
