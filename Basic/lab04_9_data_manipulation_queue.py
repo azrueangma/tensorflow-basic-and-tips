@@ -139,4 +139,3 @@ with g.as_default():
         print("<<< Train Finished >>>")
         coord.request_stop()
         coord.join(threads)
-
