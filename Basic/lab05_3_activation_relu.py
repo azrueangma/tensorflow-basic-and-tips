@@ -14,7 +14,7 @@ INPUT_DIM = np.size(x_train, 1)
 NCLASS = len(np.unique(y_train))
 BATCH_SIZE = 32
 
-TOTAL_EPOCH = 200
+TOTAL_EPOCH = 1000
 
 ntrain = len(x_train)
 nvalidation = len(x_validation)
@@ -56,7 +56,7 @@ logits = linear(h2, NCLASS, 'FC_Layer3')
 with tf.variable_scope("Optimization"):
     hypothesis = tf.nn.softmax(logits, name='hypothesis')
     loss = -tf.reduce_sum(Y_one_hot * tf.log(hypothesis), name='loss')
-    optim = tf.train.GradientDescentOptimizer(learning_rate=0.001).minimize(loss)
+    optim = tf.train.GradientDescentOptimizer(learning_rate=0.0001).minimize(loss)
 
 with tf.variable_scope("Pred_and_Acc"):
     predict = tf.argmax(hypothesis, axis=1)
@@ -103,7 +103,7 @@ with tf.Session() as sess:
         s = sess.run(merged, feed_dict = {avg_loss:loss_per_epoch, avg_acc:acc_per_epoch})
         writer.add_summary(s, global_step = epoch)
 
-        if (epoch+1) % 20 == 0:
+        if (epoch + 1) % 100 == 0:
             va, vl = sess.run([accuracy, loss], feed_dict={X: x_validation, Y: y_validation})
             epoch_valid_acc = va/len(x_validation)
             epoch_valid_loss = vl/len(x_validation)
@@ -115,16 +115,17 @@ with tf.Session() as sess:
     print("<<< Train Finished >>>")
 
 '''
-Epoch [ 20/200], train loss = 0.104339, train accuracy = 97.51%, valid loss = 0.106230, valid accuracy = 97.27%, duration = 0.082370(s)
-Epoch [ 40/200], train loss = 0.067286, train accuracy = 98.42%, valid loss = 0.083363, valid accuracy = 97.91%, duration = 0.103476(s)
-Epoch [ 60/200], train loss = 0.052767, train accuracy = 98.89%, valid loss = 0.077430, valid accuracy = 98.36%, duration = 0.095469(s)
-Epoch [ 80/200], train loss = 0.044407, train accuracy = 99.09%, valid loss = 0.075799, valid accuracy = 98.36%, duration = 0.082597(s)
-Epoch [100/200], train loss = 0.038462, train accuracy = 99.22%, valid loss = 0.077654, valid accuracy = 98.27%, duration = 0.084502(s)
-Epoch [120/200], train loss = 0.033949, train accuracy = 99.28%, valid loss = 0.077725, valid accuracy = 98.27%, duration = 0.082612(s)
-Epoch [140/200], train loss = 0.030063, train accuracy = 99.43%, valid loss = 0.078515, valid accuracy = 98.27%, duration = 0.104323(s)
-Epoch [160/200], train loss = 0.027012, train accuracy = 99.45%, valid loss = 0.079685, valid accuracy = 98.27%, duration = 0.080808(s)
-Epoch [180/200], train loss = 0.024462, train accuracy = 99.53%, valid loss = 0.080803, valid accuracy = 98.18%, duration = 0.077320(s)
-Epoch [200/200], train loss = 0.022288, train accuracy = 99.56%, valid loss = 0.081579, valid accuracy = 98.18%, duration = 0.082301(s)
-Duration for train : 17.508737(s)
+Total step :  240
+Epoch [100/1000], train loss = 0.162705, train accuracy = 95.38%, valid loss = 0.151719, valid accuracy = 96.00%, duration = 0.078444(s)
+Epoch [200/1000], train loss = 0.097606, train accuracy = 97.71%, valid loss = 0.101648, valid accuracy = 97.27%, duration = 0.094757(s)
+Epoch [300/1000], train loss = 0.075790, train accuracy = 98.24%, valid loss = 0.085343, valid accuracy = 97.73%, duration = 0.079297(s)
+Epoch [400/1000], train loss = 0.064158, train accuracy = 98.57%, valid loss = 0.079335, valid accuracy = 97.82%, duration = 0.103252(s)
+Epoch [500/1000], train loss = 0.056452, train accuracy = 98.71%, valid loss = 0.076358, valid accuracy = 97.91%, duration = 0.082393(s)
+Epoch [600/1000], train loss = 0.050371, train accuracy = 98.84%, valid loss = 0.074862, valid accuracy = 98.00%, duration = 0.078616(s)
+Epoch [700/1000], train loss = 0.045930, train accuracy = 99.02%, valid loss = 0.073004, valid accuracy = 98.00%, duration = 0.077488(s)
+Epoch [800/1000], train loss = 0.042480, train accuracy = 99.11%, valid loss = 0.071962, valid accuracy = 98.09%, duration = 0.088154(s)
+Epoch [900/1000], train loss = 0.039670, train accuracy = 99.18%, valid loss = 0.071613, valid accuracy = 98.09%, duration = 0.101962(s)
+Epoch [1000/1000], train loss = 0.037039, train accuracy = 99.28%, valid loss = 0.070587, valid accuracy = 98.27%, duration = 0.095483(s)
+Duration for train : 86.120444(s)
 <<< Train Finished >>>
 '''
