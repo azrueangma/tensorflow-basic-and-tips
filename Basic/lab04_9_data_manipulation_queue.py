@@ -68,6 +68,11 @@ g = tf.Graph()
 with g.as_default():
     tf.set_random_seed(0)
 
+    with tf.variable_scope("Train_Queue"):
+        train_filename_queue = tf.train.string_input_producer(train_list, shuffle=True, seed=0, num_epochs=None)
+        x_mini_batch_op, y_mini_batch_op = read_one_sample(train_filename_queue)
+        x_mini_batch, y_mini_batch = tf.train.batch([x_mini_batch_op, y_mini_batch_op], batch_size=BATCH_SIZE)
+
     with tf.variable_scope("Inputs"):
         X = tf.placeholder(shape=[None, INPUT_DIM], dtype=tf.float32, name='X')
         Y = tf.placeholder(shape=[None, 1], dtype=tf.int32, name='Y')
@@ -92,11 +97,6 @@ with g.as_default():
         avg_acc = tf.placeholder(tf.float32)
         acc_avg = tf.summary.scalar('avg_acc', avg_acc)
         merged = tf.summary.merge_all()
-
-    with tf.variable_scope("Train_Queue"):
-        train_filename_queue = tf.train.string_input_producer(train_list, shuffle = True, seed = 0, num_epochs = None)
-        x_mini_batch_op, y_mini_batch_op = read_one_sample(train_filename_queue)
-        x_mini_batch, y_mini_batch = tf.train.batch([x_mini_batch_op, y_mini_batch_op], batch_size = BATCH_SIZE)
 
     init_op = tf.global_variables_initializer()
     total_step = int(nsamples / BATCH_SIZE)
@@ -139,3 +139,18 @@ with g.as_default():
         print("<<< Train Finished >>>")
         coord.request_stop()
         coord.join(threads)
+
+'''
+Epoch [100/1000], train loss = 0.175064, train accuracy = 95.70%, duration = 1.234136(s)
+Epoch [200/1000], train loss = 0.088415, train accuracy = 98.06%, duration = 1.491218(s)
+Epoch [300/1000], train loss = 0.063637, train accuracy = 98.58%, duration = 1.233490(s)
+Epoch [400/1000], train loss = 0.045786, train accuracy = 99.07%, duration = 1.403404(s)
+Epoch [500/1000], train loss = 0.036937, train accuracy = 99.32%, duration = 1.429733(s)
+Epoch [600/1000], train loss = 0.030345, train accuracy = 99.44%, duration = 1.584678(s)
+Epoch [700/1000], train loss = 0.026781, train accuracy = 99.57%, duration = 1.696624(s)
+Epoch [800/1000], train loss = 0.023470, train accuracy = 99.63%, duration = 1.308650(s)
+Epoch [900/1000], train loss = 0.020309, train accuracy = 99.68%, duration = 1.369758(s)
+Epoch [1000/1000], train loss = 0.015571, train accuracy = 99.80%, duration = 1.637397(s)
+Duration for train : 1541.970177(s)
+<<< Train Finished >>>
+'''
