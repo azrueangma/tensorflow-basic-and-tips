@@ -131,8 +131,10 @@ def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
         buf = bytestream.read(28 * 28 * 10000+8)
         data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
         data = data[8:]
-        data = data.reshape(10000, 28, 28, 1)
-        x_test = data[:, :, :, 0]
+        if as_image == True:
+            x_test = data.reshape(10000, 28, 28)
+        else:
+            x_test = data.reshape(10000, 784)
 
     with gzip.open(save_path+'t10k-labels-idx1-ubyte.gz') as bytestream:
         buf = bytestream.read(10008)
