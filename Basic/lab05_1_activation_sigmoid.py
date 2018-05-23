@@ -6,16 +6,14 @@ import shutil
 import load_data
 import time
 
-x_train, x_validation, x_test, y_train, y_validation, y_test = load_data.load_pendigits(seed = 0, scaling = True)
-
+x_train, x_validation, x_test, y_train, y_validation, y_test = load_data.load_mnist('./data/mnist/', seed = 0, as_image = False, scaling = True)
 
 BOARD_PATH = "./board/lab05-1_board"
-NSAMPLES = int(len(x_train)+len(x_test))
 INPUT_DIM = np.size(x_train, 1)
 NCLASS = len(np.unique(y_train))
 BATCH_SIZE = 32
 
-TOTAL_EPOCH = 1000
+TOTAL_EPOCH = 20
 
 ntrain = len(x_train)
 nvalidation = len(x_validation)
@@ -48,9 +46,10 @@ with tf.variable_scope("Inputs"):
     Y = tf.placeholder(shape = [None, 1], dtype = tf.int32, name = 'Y')
     Y_one_hot = tf.reshape(tf.one_hot(Y, NCLASS), [-1, NCLASS], name = 'Y_one_hot')
 
-h1 = sigmoid_linear(X, 32, 'FC_Layer1')
-h2 = sigmoid_linear(h1, 16, 'FC_Layer2')
-logits = linear(h2, NCLASS, 'FC_Layer3')
+h1 = sigmoid_linear(X, 256, 'Sigmoid_Layer1')
+h2 = sigmoid_linear(h1, 128, 'Sigmoid_Layer2')
+h3 = sigmoid_linear(h2, 64, 'Sigmoid_Layer3')
+logits = linear(h2, NCLASS, 'Linear_Layer')
 
 with tf.variable_scope("Optimization"):
     hypothesis = tf.nn.softmax(logits, name = 'hypothesis')
@@ -102,29 +101,16 @@ with tf.Session() as sess:
         s = sess.run(merged, feed_dict = {avg_loss:loss_per_epoch, avg_acc:acc_per_epoch})
         writer.add_summary(s, global_step = epoch)
 
-        if (epoch+1) %100 == 0:
+        if (epoch+1) % 1 == 0:
             va, vl = sess.run([accuracy, loss], feed_dict={X: x_validation, Y: y_validation})
             epoch_valid_acc = va/len(x_validation)
             epoch_valid_loss = vl/len(x_validation)
-            print("Epoch [{:3d}/{:3d}], train loss = {:.6f}, train accuracy = {:.2%}, valid loss = {:.6f}, valid accuracy = {:.2%}, duration = {:.6f}(s)".format(epoch + 1, TOTAL_EPOCH, loss_per_epoch, acc_per_epoch, epoch_valid_loss, epoch_valid_acc, epoch_duration))
+            print("Epoch [{:2d}/{:2d}], train loss = {:.6f}, train accuracy = {:.2%}, valid loss = {:.6f}, valid accuracy = {:.2%}, duration = {:.6f}(s)".format(epoch + 1, TOTAL_EPOCH, loss_per_epoch, acc_per_epoch, epoch_valid_loss, epoch_valid_acc, epoch_duration))
 
     train_end_time = time.perf_counter()
     train_duration = train_end_time - train_start_time
     print("Duration for train : {:.6f}(s)".format(train_duration))
     print("<<< Train Finished >>>")
 
-'''
-Total step :  240
-Epoch [100/1000], train loss = 0.135480, train accuracy = 97.15%, valid loss = 0.129101, valid accuracy = 97.27%, duration = 0.077054(s)
-Epoch [200/1000], train loss = 0.071756, train accuracy = 98.58%, valid loss = 0.082227, valid accuracy = 97.82%, duration = 0.077853(s)
-Epoch [300/1000], train loss = 0.050656, train accuracy = 98.91%, valid loss = 0.069411, valid accuracy = 98.09%, duration = 0.082326(s)
-Epoch [400/1000], train loss = 0.040231, train accuracy = 99.10%, valid loss = 0.063853, valid accuracy = 98.18%, duration = 0.082298(s)
-Epoch [500/1000], train loss = 0.033818, train accuracy = 99.31%, valid loss = 0.060603, valid accuracy = 98.18%, duration = 0.077818(s)
-Epoch [600/1000], train loss = 0.029243, train accuracy = 99.44%, valid loss = 0.058099, valid accuracy = 98.45%, duration = 0.082568(s)
-Epoch [700/1000], train loss = 0.025817, train accuracy = 99.47%, valid loss = 0.056065, valid accuracy = 98.36%, duration = 0.081960(s)
-Epoch [800/1000], train loss = 0.023157, train accuracy = 99.56%, valid loss = 0.054449, valid accuracy = 98.45%, duration = 0.103644(s)
-Epoch [900/1000], train loss = 0.021029, train accuracy = 99.62%, valid loss = 0.053167, valid accuracy = 98.45%, duration = 0.081173(s)
-Epoch [1000/1000], train loss = 0.019258, train accuracy = 99.69%, valid loss = 0.052087, valid accuracy = 98.45%, duration = 0.076566(s)
-Duration for train : 83.300618(s)
-<<< Train Finished >>>
-'''
+    ta = sess.run(accuracy, feed_dict = {X:x_test, Y:y_test})
+    print("/nTest Accraucy : {:.2%}".format(ta))
