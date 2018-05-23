@@ -89,12 +89,12 @@ with tf.Session() as sess:
 
         np.random.seed(epoch)
         mask = np.random.permutation(len(x_train))
-        x_trian = x_train[mask]
+
         epoch_start_time = time.perf_counter()
         for step in range(total_step):
             s = BATCH_SIZE*step
             t = BATCH_SIZE*(step+1)
-            a, l, _ = sess.run([accuracy, loss, optim], feed_dict={X: x_train[s:t,:], Y: y_train[s:t,:]})
+            a, l, _ = sess.run([accuracy, loss, optim], feed_dict={X: x_train[mask[s:t],:], Y: y_train[mask[s:t],:]})
             loss_per_epoch += l
             acc_per_epoch += a
         epoch_end_time = time.perf_counter()
