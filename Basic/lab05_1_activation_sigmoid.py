@@ -6,7 +6,8 @@ import shutil
 import load_data
 import time
 
-x_train, x_validation, x_test, y_train, y_validation, y_test = load_data.load_mnist('./data/mnist/', seed = 0, as_image = False, scaling = True)
+x_train, x_validation, x_test, y_train, y_validation, y_test \
+    = load_data.load_mnist('./data/mnist/', seed = 0, as_image = False, scaling = True)
 
 BOARD_PATH = "./board/lab05-1_board"
 INPUT_DIM = np.size(x_train, 1)
@@ -123,7 +124,7 @@ with tf.Session() as sess:
 
     ta = sess.run(accuracy, feed_dict = {X:x_test, Y:y_test})
     print("Test Accraucy : {:.2%}".format(ta/ntest))
-    
+
 '''
 Total step :  1687
 Epoch [ 1/20], train loss = 1.549676, train accuracy = 58.53%, valid loss = 0.818122, valid accuracy = 74.25%, duration = 2.078436(s)
