@@ -39,3 +39,8 @@ lab04-4 average of losses and accuracies per Epoch
 <p align="center">
 <img src = 'image/lab04_4_minibatch.PNG' height = '250px' width = '700px'> 
 </p>
+
+*Name* | *Results*|
+:---: | :---: |
+Sigmoid Layers | lab05_1_results.PNG
+
