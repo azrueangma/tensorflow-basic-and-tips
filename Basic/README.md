@@ -42,7 +42,7 @@ lab04-4 average of losses and accuracies per Epoch
 
 ## Activations
 
-*Lab* | *Activation* |*Results*|
+*Activation* |*Results*|
 :---: | :---: | :---: |
- lab05-1 | Sigmoid | <img src = 'image/lab05_1_results.PNG' height = '150px' width = '700px'> 
+ Sigmoid | <img src = 'image/lab05_1_results.PNG' height = '150px' width = '700px'> 
 
