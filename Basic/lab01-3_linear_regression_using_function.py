@@ -1,17 +1,14 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import numpy as np
 import load_data
-import shutil
-import os
-
-NPOINTS = 1000
-TOTAL_EPOCH = 1000
 
 def create_weight_variable(shape):
     W = tf.get_variable(name = 'W', shape = shape, dtype = tf.float32, initializer= tf.truncated_normal_initializer())
     b = tf.get_variable(name = 'b', shape = shape, dtype = tf.float32, initializer= tf.constant_initializer(0.0))
     return W, b
+
+NPOINTS = 1000
+TOTAL_EPOCH = 1000
 
 dataX, dataY = load_data.generate_data_for_linear_regression(NPOINTS)
 
@@ -26,6 +23,9 @@ hypothesis = tf.nn.bias_add(tf.multiply(X, W), b, name = 'hypothesis')
 loss = tf.reduce_mean(tf.square(Y-hypothesis), name = 'loss')
 optim = tf.train.GradientDescentOptimizer(learning_rate = 0.001).minimize(loss)
 
+plt.figure(num=None, figsize=(8, 14), dpi=60, facecolor='w', edgecolor='k')
+plt.subplots_adjust(hspace = 0.4, top = 0.9, bottom = 0.05)
+
 init_op = tf.global_variables_initializer()
 with tf.Session() as sess:
     sess.run(init_op)
@@ -35,6 +35,19 @@ with tf.Session() as sess:
         l, W_value, b_value, _ = sess.run([loss, W, b, optim], feed_dict={X: dataX, Y: dataY})
         if (epoch+1) %100 == 0:
             print("Epoch [{:3d}/{:3d}], loss = {:.6f}".format(epoch + 1, TOTAL_EPOCH, l))
+
+            #for plot graph
+            arg_+=1
+            plt.subplot(5, 2, arg_)
+            plt.scatter(dataX, dataY, marker='.')
+            plt.plot(dataX, dataX * W_value + b_value, c='r')
+            plt.title('Epoch {}'.format(epoch+1))
+            plt.grid()
+            plt.xlim(-2, 2)
+
+plt.suptitle('LinearRegression', fontsize=20)
+plt.savefig('./image/LAB01-3_linear_regression_using_function.jpg')
+plt.show()
 
 '''
 Epoch [100/1000], loss = 0.174033
