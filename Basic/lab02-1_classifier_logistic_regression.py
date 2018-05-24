@@ -1,5 +1,4 @@
 import tensorflow as tf
-import numpy as np
 import load_data
 
 NPOINTS = 1000
@@ -27,6 +26,7 @@ init_op = tf.global_variables_initializer()
 with tf.Session() as sess:
     sess.run(init_op)
 
+    arg_ = 0
     for epoch in range(TOTAL_EPOCH):
         a, l, _ = sess.run([ accuracy, loss, optim], feed_dict={X: dataX, Y: dataY})
         if (epoch+1) %1000 == 0:
