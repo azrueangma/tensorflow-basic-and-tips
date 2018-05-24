@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import numpy as np
 import load_data
-import shutil
-import os
 
 NPOINTS = 1000
 TOTAL_EPOCH = 1000
@@ -21,7 +18,6 @@ hypothesis = tf.nn.bias_add(tf.multiply(X, W), b, name = 'hypothesis')
 
 loss = tf.reduce_mean(tf.square(Y-hypothesis), name = 'loss')
 optim = tf.train.GradientDescentOptimizer(learning_rate = 0.001).minimize(loss)
-
 
 plt.figure(num=None, figsize=(8, 14), dpi=60, facecolor='w', edgecolor='k')
 plt.subplots_adjust(hspace = 0.4, top = 0.9, bottom = 0.05)
@@ -46,7 +42,7 @@ with tf.Session() as sess:
             plt.xlim(-2, 2)
 
 plt.suptitle('LinearRegression', fontsize=20)
-plt.savefig('./image/LAB01-1_LinearRegression.jpg')
+plt.savefig('./image/lab01-1_linear_regression.jpg')
 plt.show()
 
 '''
