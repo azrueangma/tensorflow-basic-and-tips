@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import numpy as np
 import load_data
-import shutil
-import os
 
 NPOINTS = 1000
 TOTAL_EPOCH = 1000
@@ -25,10 +22,10 @@ Y = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'Y')
 W, b = create_weight_variable([1])
 hypothesis = tf.nn.bias_add(tf.multiply(X, W), b, name = 'hypothesis')
 
-l2_norm = tf.add_n([tf.square(v) for v in tf.trainable_variables() if 'b' in v.name])[0]
+l2_norm = tf.add_n([tf.square(v) for v in tf.trainable_variables() if 'W' in v.name])[0]
 
-loss = 0.5*l2_norm+C*tf.reduce_sum(tf.maximum(tf.zeros_like(hypothesis),tf.abs(tf.subtract(hypothesis,Y))-EPSILON))
-optim = tf.train.AdamOptimizer(learning_rate = 0.001).minimize(loss)
+loss = 0.5*l2_norm+C*tf.reduce_mean(tf.maximum(tf.zeros_like(hypothesis),tf.abs(tf.subtract(hypothesis,Y))-EPSILON))
+optim = tf.train.GradientDescentOptimizer(learning_rate = 0.001).minimize(loss)
 
 plt.figure(num=None, figsize=(8, 14), dpi=60, facecolor='w', edgecolor='k')
 plt.subplots_adjust(hspace = 0.4, top = 0.9, bottom = 0.05)
@@ -57,14 +54,14 @@ plt.savefig('./image/lab01-7_support_vector_regression.jpg')
 plt.show()
 
 '''
-Epoch [100/1000], loss = 4002.067627
-Epoch [200/1000], loss = 2995.555664
-Epoch [300/1000], loss = 1997.628662
-Epoch [400/1000], loss = 1019.424255
-Epoch [500/1000], loss = 419.190277
-Epoch [600/1000], loss = 377.662933
-Epoch [700/1000], loss = 377.293304
-Epoch [800/1000], loss = 377.292786
-Epoch [900/1000], loss = 377.292816
-Epoch [1000/1000], loss = 377.292725
+Epoch [100/1000], loss = 0.399017
+Epoch [200/1000], loss = 0.397028
+Epoch [300/1000], loss = 0.397028
+Epoch [400/1000], loss = 0.397027
+Epoch [500/1000], loss = 0.397027
+Epoch [600/1000], loss = 0.397027
+Epoch [700/1000], loss = 0.397027
+Epoch [800/1000], loss = 0.397027
+Epoch [900/1000], loss = 0.397027
+Epoch [1000/1000], loss = 0.397027
 '''
