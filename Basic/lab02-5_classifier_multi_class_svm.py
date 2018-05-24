@@ -17,9 +17,9 @@ print("The dimension of data samples : ", INPUT_DIM)
 
 def linear(x, output_dim, with_W, name):
     with tf.variable_scope(name):
-        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, 
+        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32,
                             initializer= tf.truncated_normal_initializer())
-        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, 
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32,
                             initializer= tf.constant_initializer(0.0))
         h = tf.nn.bias_add(tf.matmul(x, W), b, name = 'h')
         if with_W == True:
@@ -27,11 +27,11 @@ def linear(x, output_dim, with_W, name):
         else:
             return h
 
-def sigmoid_linear(x, output_dim, name):
+def sigmoid_layer(x, output_dim, name):
     with tf.variable_scope(name):
-        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, 
+        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32,
                             initializer= tf.truncated_normal_initializer())
-        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, 
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32,
                             nitializer= tf.constant_initializer(0.0))
         h = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(x, W), b), name = 'h')
         return h
@@ -43,8 +43,8 @@ Y = tf.placeholder(shape = [None, 1], dtype = tf.int32, name = 'Y')
 Y_one_hot = tf.reshape(tf.one_hot(Y, NCLASS), [-1, NCLASS], name = 'Y_one_hot')
 Y_svm_target = tf.subtract(tf.multiply(Y_one_hot, 2.), 1., 'Y_svm_target')
 
-h1 = sigmoid_linear(X, 128, 'FC_Layer1')
-h2 = sigmoid_linear(h1, 256, 'FC_Layer2')
+h1 = sigmoid_layer(X, 128, 'FC_Layer1')
+h2 = sigmoid_layer(h1, 256, 'FC_Layer2')
 logits, W = linear(h2, NCLASS, with_W = True, name = 'FC_Layer3')
 
 l2_norm = tf.reduce_sum(tf.square(W),axis=0, name = 'l2_norm')
