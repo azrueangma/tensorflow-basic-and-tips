@@ -1,7 +1,4 @@
-#tensorboard_summary with deep regression
-import matplotlib.pyplot as plt
 import tensorflow as tf
-import numpy as np
 import load_data
 import shutil
 import os
@@ -16,18 +13,20 @@ def linear(x, output_dim, with_W, name):
     with tf.variable_scope(name):
         W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, 
                             initializer= tf.truncated_normal_initializer())
-        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, 
+                            initializer= tf.constant_initializer(0.0))
         h = tf.nn.bias_add(tf.matmul(x, W), b, name = 'h')
         if with_W:
             return h, W
         else:
             return h
 
-def sigmoid_linear(x, output_dim, with_W, name):
+def sigmoid_layer(x, output_dim, with_W, name):
     with tf.variable_scope(name):
         W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, 
                             initializer= tf.truncated_normal_initializer())
-        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, 
+                            initializer= tf.constant_initializer(0.0))
         h = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(x, W), b), name = 'h')
         if with_W:
             return h, W
@@ -43,8 +42,8 @@ with g.as_default(), tf.variable_scope("Model1"):
         g1_X = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'X')
         g1_Y = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'Y')
 
-    g1_h1 = sigmoid_linear(g1_X, 5, False, 'FC_Layer1')
-    g1_h2 = sigmoid_linear(g1_h1, 10, False, 'FC_Layer2')
+    g1_h1 = sigmoid_layer(g1_X, 5, False, 'FC_Layer1')
+    g1_h2 = sigmoid_layer(g1_h1, 10, False, 'FC_Layer2')
     g1_h3 = linear(g1_h2, 1, False, 'FC_Layer3')
     g1_hypothesis = tf.identity(g1_h3, name = 'hypothesis')
 
@@ -60,8 +59,8 @@ with g.as_default(), tf.variable_scope("Model2"):
         g2_X = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'X')
         g2_Y = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'Y')
 
-    g2_h1 = sigmoid_linear(g2_X, 5, False, 'FC_Layer1')
-    g2_h2 = sigmoid_linear(g2_h1, 10, False, 'FC_Layer2')
+    g2_h1 = sigmoid_layer(g2_X, 5, False, 'FC_Layer1')
+    g2_h2 = sigmoid_layer(g2_h1, 10, False, 'FC_Layer2')
     g2_h3 = linear(g2_h2, 1, False, 'FC_Layer3')
     g2_hypothesis = tf.identity(g2_h3, name = 'hypothesis')
 
@@ -75,8 +74,8 @@ with g.as_default(), tf.variable_scope("Model3"):
         g3_X = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'X')
         g3_Y = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'Y')
 
-    g3_h1 = sigmoid_linear(g3_X, 5, False, 'FC_Layer1')
-    g3_h2 = sigmoid_linear(g3_h1, 10, False, 'FC_Layer2')
+    g3_h1 = sigmoid_layer(g3_X, 5, False, 'FC_Layer1')
+    g3_h2 = sigmoid_layer(g3_h1, 10, False, 'FC_Layer2')
     g3_h3 = linear(g3_h2, 1, False, 'FC_Layer3')
     g3_hypothesis = tf.identity(g3_h3, name = 'hypothesis')
 
