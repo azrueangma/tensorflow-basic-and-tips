@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import numpy as np
 import load_data
-import shutil
-import os
 
 NPOINTS = 1000
 TOTAL_EPOCH = 1000
@@ -23,7 +20,7 @@ Y = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'Y')
 W, b = create_weight_variable([1])
 hypothesis = tf.nn.bias_add(tf.multiply(X, W), b, name = 'hypothesis')
 
-l2_norm = tf.add_n([tf.square(v) for v in tf.trainable_variables() if 'b' in v.name])[0]
+l2_norm = tf.add_n([tf.square(v) for v in tf.trainable_variables() if 'W' in v.name])[0]
 alpha = 0.01
 
 loss = tf.add(tf.reduce_mean(tf.square(Y-hypothesis)),alpha*l2_norm, name = 'loss')
@@ -56,14 +53,14 @@ plt.savefig('./image/lab01-5_ridge_regression.jpg')
 plt.show()
 
 '''
-Epoch [100/1000], loss = 0.174184
-Epoch [200/1000], loss = 0.118511
-Epoch [300/1000], loss = 0.081295
-Epoch [400/1000], loss = 0.056403
-Epoch [500/1000], loss = 0.039740
-Epoch [600/1000], loss = 0.028573
-Epoch [700/1000], loss = 0.021079
-Epoch [800/1000], loss = 0.016040
-Epoch [900/1000], loss = 0.012642
-Epoch [1000/1000], loss = 0.010344
+Epoch [100/1000], loss = 0.174943
+Epoch [200/1000], loss = 0.118880
+Epoch [300/1000], loss = 0.081242
+Epoch [400/1000], loss = 0.055956
+Epoch [500/1000], loss = 0.038953
+Epoch [600/1000], loss = 0.027506
+Epoch [700/1000], loss = 0.019787
+Epoch [800/1000], loss = 0.014570
+Epoch [900/1000], loss = 0.011035
+Epoch [1000/1000], loss = 0.008630
 '''
