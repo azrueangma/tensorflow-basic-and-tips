@@ -1,9 +1,5 @@
-import matplotlib.pyplot as plt
 import tensorflow as tf
-import numpy as np
 import load_data
-import shutil
-import os
 
 def create_weight_variable(shape):
     W = tf.get_variable(name = 'W', shape = shape, dtype = tf.float32, initializer= tf.truncated_normal_initializer())
