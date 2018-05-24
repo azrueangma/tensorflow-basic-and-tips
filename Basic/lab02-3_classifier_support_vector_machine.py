@@ -4,6 +4,7 @@ import load_data
 
 NPOINTS = 1000
 TOTAL_EPOCH = 20
+NCLASS = 2
 C = 10.0
 
 def svm_target(y):
