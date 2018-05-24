@@ -1,7 +1,4 @@
-#tensorboard_summary with deep regression
-import matplotlib.pyplot as plt
 import tensorflow as tf
-import numpy as np
 import load_data
 import shutil
 import time
@@ -15,8 +12,10 @@ BOARD_PATH = "./board/lab03-4_board"
 
 def linear(x, output_dim, with_W, name):
     with tf.variable_scope(name):
-        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, initializer= tf.truncated_normal_initializer())
-        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
+        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, 
+                            initializer= tf.truncated_normal_initializer())
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, 
+                            initializer= tf.constant_initializer(0.0))
         h = tf.nn.bias_add(tf.matmul(x, W), b, name = 'h')
         if with_W:
             return h, W
@@ -25,8 +24,10 @@ def linear(x, output_dim, with_W, name):
 
 def sigmoid_linear(x, output_dim, with_W, name):
     with tf.variable_scope(name):
-        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, initializer= tf.truncated_normal_initializer())
-        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
+        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, 
+                            initializer= tf.truncated_normal_initializer())
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, 
+                            initializer= tf.constant_initializer(0.0))
         h = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(x, W), b), name = 'h')
         if with_W:
             return h, W
