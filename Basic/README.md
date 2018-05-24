@@ -9,7 +9,7 @@ lab01-1 | lab01-5
 lab01-6 | lab01-7
 :---: | :---: 
 <img src = 'image/lab01-6_lasso_regression.jpg' height = '800px'> | <img src = 'image/lab01-7_support_vector_regression.jpg' height = '800px'> 
-
+ 
 ## tensorboard
 
 lab03-1 | lab03-2
