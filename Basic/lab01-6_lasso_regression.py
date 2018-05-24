@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import numpy as np
 import load_data
-import shutil
-import os
 
 NPOINTS = 1000
 TOTAL_EPOCH = 1000
@@ -23,7 +20,7 @@ Y = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'Y')
 W, b = create_weight_variable([1])
 hypothesis = tf.nn.bias_add(tf.multiply(X, W), b, name = 'hypothesis')
 
-l1_norm = tf.add_n([tf.abs(v) for v in tf.trainable_variables() if 'b' in v.name])[0]
+l1_norm = tf.add_n([tf.abs(v) for v in tf.trainable_variables() if 'W' in v.name])[0]
 alpha = 0.01
 
 loss = tf.add(tf.reduce_mean(tf.square(Y-hypothesis)),alpha*l1_norm, name = 'loss')
@@ -56,14 +53,14 @@ plt.savefig('./image/lab01-6_lasso_regression.jpg')
 plt.show()
 
 '''
-Epoch [100/1000], loss = 0.174184
-Epoch [200/1000], loss = 0.118511
-Epoch [300/1000], loss = 0.081295
-Epoch [400/1000], loss = 0.056403
-Epoch [500/1000], loss = 0.039740
-Epoch [600/1000], loss = 0.028573
-Epoch [700/1000], loss = 0.021079
-Epoch [800/1000], loss = 0.016040
-Epoch [900/1000], loss = 0.012642
-Epoch [1000/1000], loss = 0.010344
+Epoch [100/1000], loss = 0.177048
+Epoch [200/1000], loss = 0.120939
+Epoch [300/1000], loss = 0.083258
+Epoch [400/1000], loss = 0.057933
+Epoch [500/1000], loss = 0.040894
+Epoch [600/1000], loss = 0.029413
+Epoch [700/1000], loss = 0.021663
+Epoch [800/1000], loss = 0.016418
+Epoch [900/1000], loss = 0.012856
+Epoch [1000/1000], loss = 0.010427
 '''
