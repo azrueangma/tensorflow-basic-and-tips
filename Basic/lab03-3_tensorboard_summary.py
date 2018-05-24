@@ -1,7 +1,4 @@
-#tensorboard_summary with deep regression
-import matplotlib.pyplot as plt
 import tensorflow as tf
-import numpy as np
 import load_data
 import shutil
 import os
@@ -12,18 +9,22 @@ BOARD_PATH = "./board/lab03-3_board"
 
 def linear(x, output_dim, with_W, name):
     with tf.variable_scope(name):
-        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, initializer= tf.truncated_normal_initializer())
-        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
+        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32,
+                            initializer= tf.truncated_normal_initializer())
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32,
+                            initializer= tf.constant_initializer(0.0))
         h = tf.nn.bias_add(tf.matmul(x, W), b, name = 'h')
         if with_W:
             return h, W
         else:
             return h
 
-def sigmoid_linear(x, output_dim, with_W, name):
+def sigmoid_layer(x, output_dim, with_W, name):
     with tf.variable_scope(name):
-        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32, initializer= tf.truncated_normal_initializer())
-        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
+        W = tf.get_variable(name = 'W', shape = [x.get_shape()[-1], output_dim], dtype = tf.float32,
+                            initializer= tf.truncated_normal_initializer())
+        b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32,
+                            initializer= tf.constant_initializer(0.0))
         h = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(x, W), b), name = 'h')
         if with_W:
             return h, W
@@ -38,8 +39,8 @@ with tf.variable_scope("Inputs"):
     X = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'X')
     Y = tf.placeholder(shape = [None, 1], dtype = tf.float32, name = 'Y')
 
-h1, W1 = sigmoid_linear(X, 5, True, 'FC_Layer1')
-h2, W2 = sigmoid_linear(h1, 10, True, 'FC_Layer2')
+h1, W1 = sigmoid_layer(X, 5, True, 'FC_Layer1')
+h2, W2 = sigmoid_layer(h1, 10, True, 'FC_Layer2')
 h3, W3 = linear(h2, 1, True, 'FC_Layer3')
 hypothesis = tf.identity(h3, name = 'hypothesis')
 
@@ -47,11 +48,12 @@ with tf.variable_scope('Optimization'):
     loss = tf.reduce_mean(tf.square(Y-hypothesis), name = 'loss')
     optim = tf.train.GradientDescentOptimizer(learning_rate = 0.001).minimize(loss)
 
-W1_hist = tf.summary.histogram("Weight1", W1)
-W2_hist = tf.summary.histogram("Weight2", W2)
-W3_hist = tf.summary.histogram("Weight3", W3)
-loss_scalar = tf.summary.scalar('loss', loss)
-merged = tf.summary.merge_all()
+with tf.variable_scope('Summary'):
+    W1_hist = tf.summary.histogram("Weight1", W1)
+    W2_hist = tf.summary.histogram("Weight2", W2)
+    W3_hist = tf.summary.histogram("Weight3", W3)
+    loss_scalar = tf.summary.scalar('loss', loss)
+    merged = tf.summary.merge_all()
 
 init_op = tf.global_variables_initializer()
 with tf.Session() as sess:
