@@ -13,7 +13,7 @@ INPUT_DIM = np.size(x_train, 1)
 NCLASS = len(np.unique(y_train))
 BATCH_SIZE = 32
 
-TOTAL_EPOCH = 20
+TOTAL_EPOCH = 30
 ALPHA = 0.001
 
 ntrain = len(x_train)
@@ -24,20 +24,20 @@ print("The number of train samples : ", ntrain)
 print("The number of validation samples : ", nvalidation)
 print("The number of test samples : ", ntest)
 
-def l1_loss (x, name='l1_loss'):
-    output = tf.reduce_sum(tf.abs(x), name = name)
+def l1_loss (tensor_op, name='l1_loss'):
+    output = tf.reduce_sum(tf.abs(tensor_op), name = name)
     return output
 
-def l2_loss (x, name='l2_loss'):
-    output = tf.reduce_sum(tf.square(x), name = name)/2
+def l2_loss (tensor_op, name='l2_loss'):
+    output = tf.reduce_sum(tf.square(tensor_op), name = name)/2
     return output
 
-def linear(x, output_dim, weight_decay = None, name='linear'):
+def linear(tensor_op, output_dim, weight_decay = None, name='linear'):
     with tf.variable_scope(name):
-        W = tf.get_variable(name='W', shape=[x.get_shape()[-1], output_dim], dtype=tf.float32,
+        W = tf.get_variable(name='W', shape=[tensor_op.get_shape()[-1], output_dim], dtype=tf.float32,
                             initializer=tf.glorot_uniform_initializer())
         b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
-        h = tf.nn.bias_add(tf.matmul(x, W), b, name = 'h')
+        h = tf.nn.bias_add(tf.matmul(tensor_op, W), b, name = 'h')
 
         if weight_decay:
             wd = l2_loss(W)*weight_decay
@@ -45,12 +45,12 @@ def linear(x, output_dim, weight_decay = None, name='linear'):
 
         return h
 
-def relu_layer(x, output_dim, weight_decay = None, name='relu_layer'):
+def relu_layer(tensor_op, output_dim, weight_decay = None, name='relu_layer'):
     with tf.variable_scope(name):
-        W = tf.get_variable(name='W', shape=[x.get_shape()[-1], output_dim], dtype=tf.float32,
+        W = tf.get_variable(name='W', shape=[tensor_op.get_shape()[-1], output_dim], dtype=tf.float32,
                             initializer=tf.glorot_uniform_initializer())
         b = tf.get_variable(name = 'b', shape = [output_dim], dtype = tf.float32, initializer= tf.constant_initializer(0.0))
-        h = tf.nn.relu(tf.nn.bias_add(tf.matmul(x, W), b), name = 'h')
+        h = tf.nn.relu(tf.nn.bias_add(tf.matmul(tensor_op, W), b), name = 'h')
 
         if weight_decay:
             wd = l2_loss(W)*weight_decay
@@ -67,18 +67,19 @@ with tf.variable_scope("Inputs"):
 
 h1 = relu_layer(X, 256, ALPHA, 'Relu_Layer1')
 h2 = relu_layer(h1, 128, ALPHA, 'Relu_Layer2')
-h3 = relu_layer(h2, 64, ALPHA, 'Relu_Layer3')
-logits = linear(h1, NCLASS, ALPHA, 'Linear_Layer')
+logits = linear(h2, NCLASS, ALPHA, 'Linear_Layer')
 
 with tf.variable_scope("Optimization"):
     hypothesis = tf.nn.softmax(logits, name = 'hypothesis')
     normal_loss = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits_v2(logits = logits, labels = Y_one_hot), name = 'loss')
     weight_decay_loss = tf.get_collection("weight_decay")
-    loss = normal_loss+tf.reduce_mean(weight_decay_loss)
-    optim = tf.train.AdamOptimizer(learning_rate = 0.001).minimize(loss)
+    loss = normal_loss + tf.reduce_sum(weight_decay_loss)
+    optim = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
 
-with tf.variable_scope("Pred_and_Acc"):
+with tf.variable_scope("Prediction"):
     predict = tf.argmax(hypothesis, axis=1)
+
+with tf.variable_scope("Accuracy"):
     accuracy = tf.reduce_sum(tf.cast(tf.equal(predict, tf.argmax(Y_one_hot, axis = 1)), tf.float32))
 
 with tf.variable_scope("Summary"):
@@ -146,27 +147,37 @@ with tf.Session() as sess:
     print("Test Accraucy : {:.2%}".format(ta/ntest))
 
 '''
-Epoch [ 1/20], train loss = 0.236437, train accuracy = 93.19%, valid loss = 0.121948, valid accuracy = 96.47%, duration = 2.420570(s)
-Epoch [ 2/20], train loss = 0.098225, train accuracy = 97.20%, valid loss = 0.083879, valid accuracy = 97.47%, duration = 2.659546(s)
-Epoch [ 3/20], train loss = 0.067024, train accuracy = 98.05%, valid loss = 0.069901, valid accuracy = 97.95%, duration = 2.545539(s)
-Epoch [ 4/20], train loss = 0.050630, train accuracy = 98.58%, valid loss = 0.078543, valid accuracy = 97.57%, duration = 2.073496(s)
-Epoch [ 5/20], train loss = 0.040050, train accuracy = 98.92%, valid loss = 0.066128, valid accuracy = 98.08%, duration = 2.083706(s)
-Epoch [ 6/20], train loss = 0.032976, train accuracy = 99.18%, valid loss = 0.065513, valid accuracy = 98.13%, duration = 2.255514(s)
-Epoch [ 7/20], train loss = 0.028090, train accuracy = 99.33%, valid loss = 0.076010, valid accuracy = 98.10%, duration = 2.266753(s)
-Epoch [ 8/20], train loss = 0.024558, train accuracy = 99.47%, valid loss = 0.070432, valid accuracy = 97.85%, duration = 2.242041(s)
-Epoch [ 9/20], train loss = 0.022888, train accuracy = 99.52%, valid loss = 0.086905, valid accuracy = 97.58%, duration = 2.413728(s)
-Epoch [10/20], train loss = 0.021237, train accuracy = 99.59%, valid loss = 0.076642, valid accuracy = 97.97%, duration = 2.953831(s)
-Epoch [11/20], train loss = 0.019910, train accuracy = 99.64%, valid loss = 0.073018, valid accuracy = 98.03%, duration = 2.357763(s)
-Epoch [12/20], train loss = 0.019335, train accuracy = 99.65%, valid loss = 0.080459, valid accuracy = 98.10%, duration = 2.376768(s)
-Epoch [13/20], train loss = 0.019118, train accuracy = 99.68%, valid loss = 0.071467, valid accuracy = 98.05%, duration = 2.478708(s)
-Epoch [14/20], train loss = 0.018206, train accuracy = 99.72%, valid loss = 0.071253, valid accuracy = 98.03%, duration = 2.439470(s)
-Epoch [15/20], train loss = 0.019090, train accuracy = 99.68%, valid loss = 0.086418, valid accuracy = 98.03%, duration = 2.352211(s)
-Epoch [16/20], train loss = 0.016028, train accuracy = 99.81%, valid loss = 0.092024, valid accuracy = 97.75%, duration = 2.524159(s)
-Epoch [17/20], train loss = 0.020119, train accuracy = 99.64%, valid loss = 0.077886, valid accuracy = 98.33%, duration = 2.180729(s)
-Epoch [18/20], train loss = 0.016428, train accuracy = 99.80%, valid loss = 0.070269, valid accuracy = 98.25%, duration = 2.217158(s)
-Epoch [19/20], train loss = 0.017123, train accuracy = 99.79%, valid loss = 0.088437, valid accuracy = 98.00%, duration = 2.092017(s)
-Epoch [20/20], train loss = 0.017594, train accuracy = 99.75%, valid loss = 0.082152, valid accuracy = 98.02%, duration = 2.053086(s)
-Duration for train : 47.566494(s)
+Epoch [ 1/30], train loss = 0.226197, train accuracy = 93.54%, valid loss = 0.099966, valid accuracy = 96.80%, duration = 3.656134(s)
+Epoch [ 2/30], train loss = 0.101443, train accuracy = 97.26%, valid loss = 0.088978, valid accuracy = 97.03%, duration = 3.488001(s)
+Epoch [ 3/30], train loss = 0.077703, train accuracy = 98.05%, valid loss = 0.072892, valid accuracy = 97.83%, duration = 3.544199(s)
+Epoch [ 4/30], train loss = 0.063307, train accuracy = 98.56%, valid loss = 0.092558, valid accuracy = 97.40%, duration = 3.589426(s)
+Epoch [ 5/30], train loss = 0.059579, train accuracy = 98.68%, valid loss = 0.069646, valid accuracy = 97.83%, duration = 3.938110(s)
+Epoch [ 6/30], train loss = 0.051846, train accuracy = 98.99%, valid loss = 0.061025, valid accuracy = 98.23%, duration = 3.502334(s)
+Epoch [ 7/30], train loss = 0.048884, train accuracy = 99.11%, valid loss = 0.076129, valid accuracy = 97.82%, duration = 3.876294(s)
+Epoch [ 8/30], train loss = 0.047975, train accuracy = 99.18%, valid loss = 0.080856, valid accuracy = 97.73%, duration = 3.693492(s)
+Epoch [ 9/30], train loss = 0.045384, train accuracy = 99.28%, valid loss = 0.085146, valid accuracy = 97.77%, duration = 3.627302(s)
+Epoch [10/30], train loss = 0.043891, train accuracy = 99.35%, valid loss = 0.081083, valid accuracy = 97.90%, duration = 3.574210(s)
+Epoch [11/30], train loss = 0.043285, train accuracy = 99.34%, valid loss = 0.083695, valid accuracy = 97.78%, duration = 3.887659(s)
+Epoch [12/30], train loss = 0.042956, train accuracy = 99.36%, valid loss = 0.085780, valid accuracy = 97.82%, duration = 4.382089(s)
+Epoch [13/30], train loss = 0.040046, train accuracy = 99.46%, valid loss = 0.091242, valid accuracy = 97.77%, duration = 3.547448(s)
+Epoch [14/30], train loss = 0.041058, train accuracy = 99.44%, valid loss = 0.084975, valid accuracy = 98.00%, duration = 3.714199(s)
+Epoch [15/30], train loss = 0.040997, train accuracy = 99.48%, valid loss = 0.096620, valid accuracy = 97.95%, duration = 3.560516(s)
+Epoch [16/30], train loss = 0.038895, train accuracy = 99.57%, valid loss = 0.106020, valid accuracy = 97.58%, duration = 4.189506(s)
+Epoch [17/30], train loss = 0.041071, train accuracy = 99.49%, valid loss = 0.100643, valid accuracy = 97.82%, duration = 3.837298(s)
+Epoch [18/30], train loss = 0.040091, train accuracy = 99.53%, valid loss = 0.090689, valid accuracy = 98.02%, duration = 3.860063(s)
+Epoch [19/30], train loss = 0.039613, train accuracy = 99.54%, valid loss = 0.077624, valid accuracy = 98.12%, duration = 4.662461(s)
+Epoch [20/30], train loss = 0.036674, train accuracy = 99.62%, valid loss = 0.105119, valid accuracy = 97.78%, duration = 3.791937(s)
+Epoch [21/30], train loss = 0.036790, train accuracy = 99.61%, valid loss = 0.086938, valid accuracy = 98.22%, duration = 3.590448(s)
+Epoch [22/30], train loss = 0.037724, train accuracy = 99.62%, valid loss = 0.090642, valid accuracy = 97.90%, duration = 3.564460(s)
+Epoch [23/30], train loss = 0.038573, train accuracy = 99.56%, valid loss = 0.100663, valid accuracy = 97.78%, duration = 3.481936(s)
+Epoch [24/30], train loss = 0.036503, train accuracy = 99.59%, valid loss = 0.090659, valid accuracy = 98.02%, duration = 3.510936(s)
+Epoch [25/30], train loss = 0.037931, train accuracy = 99.56%, valid loss = 0.101707, valid accuracy = 97.82%, duration = 3.540913(s)
+Epoch [26/30], train loss = 0.035742, train accuracy = 99.63%, valid loss = 0.072663, valid accuracy = 98.18%, duration = 3.764390(s)
+Epoch [27/30], train loss = 0.037134, train accuracy = 99.61%, valid loss = 0.100831, valid accuracy = 97.78%, duration = 3.602890(s)
+Epoch [28/30], train loss = 0.035971, train accuracy = 99.63%, valid loss = 0.085062, valid accuracy = 97.80%, duration = 3.632649(s)
+Epoch [29/30], train loss = 0.034198, train accuracy = 99.70%, valid loss = 0.107983, valid accuracy = 97.68%, duration = 3.763032(s)
+Epoch [30/30], train loss = 0.036366, train accuracy = 99.63%, valid loss = 0.097953, valid accuracy = 97.65%, duration = 3.899226(s)
+Duration for train : 113.272060(s)
 <<< Train Finished >>>
-Test Accraucy : 97.97%
+Test Accraucy : 97.95%
 '''
