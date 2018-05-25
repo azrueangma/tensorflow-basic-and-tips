@@ -1,4 +1,3 @@
-#lab04_4 model
 import tensorflow as tf
 import numpy as np
 import os
@@ -32,7 +31,7 @@ def linear(x, output_dim, name):
         h = tf.nn.bias_add(tf.matmul(x, W), b, name = 'h')
         return h
 
-def sigmoid_linear(x, output_dim, name):
+def sigmoid_layer(x, output_dim, name):
     with tf.variable_scope(name):
         W = tf.get_variable(name='W', shape=[x.get_shape()[-1], output_dim], dtype=tf.float32,
                             initializer=tf.truncated_normal_initializer())
@@ -47,9 +46,9 @@ with tf.variable_scope("Inputs"):
     Y = tf.placeholder(shape = [None, 1], dtype = tf.int32, name = 'Y')
     Y_one_hot = tf.reshape(tf.one_hot(Y, NCLASS), [-1, NCLASS], name = 'Y_one_hot')
 
-h1 = sigmoid_linear(X, 256, 'Sigmoid_Layer1')
-h2 = sigmoid_linear(h1, 128, 'Sigmoid_Layer2')
-h3 = sigmoid_linear(h2, 64, 'Sigmoid_Layer3')
+h1 = sigmoid_layer(X, 256, 'Sigmoid_Layer1')
+h2 = sigmoid_layer(h1, 128, 'Sigmoid_Layer2')
+h3 = sigmoid_layer(h2, 64, 'Sigmoid_Layer3')
 logits = linear(h3, NCLASS, 'Linear_Layer')
 
 with tf.variable_scope("Optimization"):
