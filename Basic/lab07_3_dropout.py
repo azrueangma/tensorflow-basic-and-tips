@@ -13,7 +13,7 @@ INPUT_DIM = np.size(x_train, 1)
 NCLASS = len(np.unique(y_train))
 BATCH_SIZE = 32
 
-TOTAL_EPOCH = 20
+TOTAL_EPOCH = 30
 KEEP_PROB = 0.7
 
 ntrain = len(x_train)
@@ -96,15 +96,14 @@ with tf.variable_scope("Inputs"):
 
 h1 = relu_layer(X, 256, keep_prob = keep_prob, name = 'Relu_Layer1')
 h2 = relu_layer(h1, 128, keep_prob = keep_prob, name = 'Relu_Layer2')
-h3 = relu_layer(h2, 64, keep_prob = keep_prob, name = 'Relu_Layer3')
-logits = linear(h1, NCLASS, name = 'Linear_Layer')
+logits = linear(h2, NCLASS, name = 'Linear_Layer')
 
 with tf.variable_scope("Optimization"):
     hypothesis = tf.nn.softmax(logits, name = 'hypothesis')
     normal_loss = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits_v2(logits = logits, labels = Y_one_hot), name = 'loss')
     weight_decay_loss = tf.get_collection("weight_decay")
-    loss = normal_loss+tf.reduce_mean(weight_decay_loss)
-    optim = tf.train.AdamOptimizer(learning_rate = 0.001).minimize(loss)
+    loss = normal_loss + tf.reduce_sum(weight_decay_loss)
+    optim = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
 
 with tf.variable_scope("Pred_and_Acc"):
     predict = tf.argmax(hypothesis, axis=1)
@@ -175,27 +174,37 @@ with tf.Session() as sess:
     print("Test Accraucy : {:.2%}".format(ta/ntest))
 
 '''
-Epoch [ 1/20], train loss = 0.277987, train accuracy = 91.95%, valid loss = 0.124472, valid accuracy = 96.25%, duration = 2.553065(s)
-Epoch [ 2/20], train loss = 0.133117, train accuracy = 95.99%, valid loss = 0.097340, valid accuracy = 96.95%, duration = 2.464948(s)
-Epoch [ 3/20], train loss = 0.099918, train accuracy = 96.92%, valid loss = 0.076867, valid accuracy = 97.55%, duration = 2.406296(s)
-Epoch [ 4/20], train loss = 0.081288, train accuracy = 97.53%, valid loss = 0.076492, valid accuracy = 97.52%, duration = 2.439633(s)
-Epoch [ 5/20], train loss = 0.068619, train accuracy = 97.81%, valid loss = 0.066035, valid accuracy = 97.83%, duration = 2.305432(s)
-Epoch [ 6/20], train loss = 0.059843, train accuracy = 98.10%, valid loss = 0.059265, valid accuracy = 98.10%, duration = 2.252216(s)
-Epoch [ 7/20], train loss = 0.052069, train accuracy = 98.30%, valid loss = 0.065850, valid accuracy = 97.97%, duration = 2.296361(s)
-Epoch [ 8/20], train loss = 0.045053, train accuracy = 98.52%, valid loss = 0.066219, valid accuracy = 98.07%, duration = 2.291678(s)
-Epoch [ 9/20], train loss = 0.043268, train accuracy = 98.56%, valid loss = 0.059345, valid accuracy = 98.23%, duration = 2.409814(s)
-Epoch [10/20], train loss = 0.040199, train accuracy = 98.68%, valid loss = 0.060506, valid accuracy = 98.30%, duration = 2.184521(s)
-Epoch [11/20], train loss = 0.034075, train accuracy = 98.87%, valid loss = 0.063404, valid accuracy = 98.10%, duration = 2.177903(s)
-Epoch [12/20], train loss = 0.033103, train accuracy = 98.87%, valid loss = 0.063077, valid accuracy = 98.20%, duration = 2.106277(s)
-Epoch [13/20], train loss = 0.031025, train accuracy = 98.97%, valid loss = 0.066112, valid accuracy = 98.17%, duration = 2.260172(s)
-Epoch [14/20], train loss = 0.029759, train accuracy = 98.93%, valid loss = 0.057042, valid accuracy = 98.47%, duration = 2.140136(s)
-Epoch [15/20], train loss = 0.028456, train accuracy = 99.04%, valid loss = 0.060951, valid accuracy = 98.32%, duration = 2.114386(s)
-Epoch [16/20], train loss = 0.028305, train accuracy = 99.03%, valid loss = 0.064858, valid accuracy = 98.28%, duration = 2.097135(s)
-Epoch [17/20], train loss = 0.025388, train accuracy = 99.15%, valid loss = 0.067400, valid accuracy = 98.28%, duration = 2.093158(s)
-Epoch [18/20], train loss = 0.024719, train accuracy = 99.16%, valid loss = 0.064274, valid accuracy = 98.40%, duration = 2.221512(s)
-Epoch [19/20], train loss = 0.024517, train accuracy = 99.19%, valid loss = 0.065565, valid accuracy = 98.45%, duration = 2.261557(s)
-Epoch [20/20], train loss = 0.023141, train accuracy = 99.23%, valid loss = 0.066755, valid accuracy = 98.30%, duration = 2.264446(s)
-Duration for train : 46.080287(s)
+Epoch [ 1/30], train loss = 0.315420, train accuracy = 90.41%, valid loss = 0.117097, valid accuracy = 96.27%, duration = 3.759319(s)
+Epoch [ 2/30], train loss = 0.150673, train accuracy = 95.44%, valid loss = 0.089674, valid accuracy = 97.15%, duration = 3.374273(s)
+Epoch [ 3/30], train loss = 0.119275, train accuracy = 96.37%, valid loss = 0.079328, valid accuracy = 97.48%, duration = 3.287235(s)
+Epoch [ 4/30], train loss = 0.098761, train accuracy = 96.96%, valid loss = 0.084369, valid accuracy = 97.52%, duration = 3.339211(s)
+Epoch [ 5/30], train loss = 0.088286, train accuracy = 97.31%, valid loss = 0.070142, valid accuracy = 97.65%, duration = 3.214132(s)
+Epoch [ 6/30], train loss = 0.080282, train accuracy = 97.52%, valid loss = 0.067098, valid accuracy = 97.97%, duration = 3.265347(s)
+Epoch [ 7/30], train loss = 0.074805, train accuracy = 97.55%, valid loss = 0.070007, valid accuracy = 98.13%, duration = 3.197694(s)
+Epoch [ 8/30], train loss = 0.068578, train accuracy = 97.83%, valid loss = 0.065617, valid accuracy = 97.95%, duration = 3.273621(s)
+Epoch [ 9/30], train loss = 0.062353, train accuracy = 98.03%, valid loss = 0.059050, valid accuracy = 98.15%, duration = 3.195422(s)
+Epoch [10/30], train loss = 0.061114, train accuracy = 98.06%, valid loss = 0.061511, valid accuracy = 98.27%, duration = 3.283611(s)
+Epoch [11/30], train loss = 0.055844, train accuracy = 98.25%, valid loss = 0.064871, valid accuracy = 98.27%, duration = 3.262858(s)
+Epoch [12/30], train loss = 0.054371, train accuracy = 98.30%, valid loss = 0.060114, valid accuracy = 98.33%, duration = 3.260496(s)
+Epoch [13/30], train loss = 0.055946, train accuracy = 98.28%, valid loss = 0.064533, valid accuracy = 98.38%, duration = 3.209184(s)
+Epoch [14/30], train loss = 0.047963, train accuracy = 98.43%, valid loss = 0.064354, valid accuracy = 98.43%, duration = 3.247119(s)
+Epoch [15/30], train loss = 0.047506, train accuracy = 98.50%, valid loss = 0.065541, valid accuracy = 98.47%, duration = 3.260134(s)
+Epoch [16/30], train loss = 0.048143, train accuracy = 98.43%, valid loss = 0.070454, valid accuracy = 98.03%, duration = 3.266058(s)
+Epoch [17/30], train loss = 0.042599, train accuracy = 98.65%, valid loss = 0.068914, valid accuracy = 98.32%, duration = 3.322012(s)
+Epoch [18/30], train loss = 0.042397, train accuracy = 98.66%, valid loss = 0.068305, valid accuracy = 98.25%, duration = 3.251673(s)
+Epoch [19/30], train loss = 0.039463, train accuracy = 98.73%, valid loss = 0.061266, valid accuracy = 98.45%, duration = 3.246617(s)
+Epoch [20/30], train loss = 0.042149, train accuracy = 98.72%, valid loss = 0.066077, valid accuracy = 98.37%, duration = 3.264390(s)
+Epoch [21/30], train loss = 0.037433, train accuracy = 98.75%, valid loss = 0.065439, valid accuracy = 98.53%, duration = 3.220554(s)
+Epoch [22/30], train loss = 0.038973, train accuracy = 98.77%, valid loss = 0.070272, valid accuracy = 98.47%, duration = 3.253425(s)
+Epoch [23/30], train loss = 0.038366, train accuracy = 98.77%, valid loss = 0.068326, valid accuracy = 98.30%, duration = 3.289393(s)
+Epoch [24/30], train loss = 0.040648, train accuracy = 98.75%, valid loss = 0.063163, valid accuracy = 98.47%, duration = 3.286112(s)
+Epoch [25/30], train loss = 0.036811, train accuracy = 98.86%, valid loss = 0.067243, valid accuracy = 98.32%, duration = 3.203410(s)
+Epoch [26/30], train loss = 0.034989, train accuracy = 98.91%, valid loss = 0.071312, valid accuracy = 98.35%, duration = 3.274750(s)
+Epoch [27/30], train loss = 0.037312, train accuracy = 98.84%, valid loss = 0.065816, valid accuracy = 98.53%, duration = 3.308699(s)
+Epoch [28/30], train loss = 0.032378, train accuracy = 98.96%, valid loss = 0.066437, valid accuracy = 98.50%, duration = 3.935454(s)
+Epoch [29/30], train loss = 0.036182, train accuracy = 98.91%, valid loss = 0.072966, valid accuracy = 98.38%, duration = 3.603243(s)
+Epoch [30/30], train loss = 0.032209, train accuracy = 98.96%, valid loss = 0.069240, valid accuracy = 98.45%, duration = 3.640791(s)
+Duration for train : 101.165612(s)
 <<< Train Finished >>>
-Test Accraucy : 98.29%
+Test Accraucy : 98.25%
 '''
