@@ -68,7 +68,7 @@ def linear(x, output_dim, name):
         h = tf.nn.bias_add(tf.matmul(x, W), b, name = 'h')
         return h
 
-def sigmoid_linear(x, output_dim, name):
+def sigmoid_layer(x, output_dim, name):
     with tf.variable_scope(name):
         W = tf.get_variable(name='W', shape=[x.get_shape()[-1], output_dim], dtype=tf.float32,
                             initializer=tf.truncated_normal_initializer())
@@ -83,8 +83,8 @@ with tf.variable_scope("Inputs"):
     Y = tf.placeholder(shape = [None, 1], dtype = tf.int32, name = 'Y')
     Y_one_hot = tf.reshape(tf.one_hot(Y, NCLASS), [-1, NCLASS], name = 'Y_one_hot')
 
-h1 = sigmoid_linear(X, 8, 'FC_Layer1')
-h2 = sigmoid_linear(h1, 10, 'FC_Layer2')
+h1 = sigmoid_layer(X, 8, 'FC_Layer1')
+h2 = sigmoid_layer(h1, 10, 'FC_Layer2')
 logits = linear(h2, NCLASS, 'FC_Layer3')
 
 with tf.variable_scope("Optimization"):
@@ -104,7 +104,7 @@ with tf.variable_scope("Summary"):
     merged = tf.summary.merge_all()
 
 init_op = tf.global_variables_initializer()
-total_step = int(NSAMPLES/BATCH_SIZE)
+total_step = int(ntrain/BATCH_SIZE)
 print("Total step : ", total_step)
 with tf.Session() as sess:
     if os.path.exists(BOARD_PATH):
@@ -113,39 +113,42 @@ with tf.Session() as sess:
     writer.add_graph(sess.graph)
 
     sess.run(init_op)
-
     for epoch in range(TOTAL_EPOCH):
         loss_per_epoch = 0
         acc_per_epoch = 0
+        np.random.seed(epoch)
+        mask = np.random.permutation(len(x_train))
         for step in range(total_step):
             s = BATCH_SIZE*step
             t = BATCH_SIZE*(step+1)
-            a, l, _ = sess.run([accuracy, loss, optim], feed_dict={X: x_train[s:t,:], Y: y_train[s:t,:]})
+            a, l, _ = sess.run([accuracy, loss, optim], feed_dict={X: x_train[mask[s:t],:], Y: y_train[mask[s:t],:]})
             loss_per_epoch += l
             acc_per_epoch += a
 
-        loss_per_epoch /= total_step*BATCH_SIZE
-        acc_per_epoch /= total_step*BATCH_SIZE
+        loss_per_epoch /= total_step * BATCH_SIZE
+        acc_per_epoch /= total_step * BATCH_SIZE
 
         s = sess.run(merged, feed_dict = {avg_loss:loss_per_epoch, avg_acc:acc_per_epoch})
         writer.add_summary(s, global_step = epoch)
 
+        va, vl = sess.run([accuracy, loss], feed_dict={X: x_validation, Y: y_validation})
+        epoch_valid_acc = va / len(x_validation)
+        epoch_valid_loss = vl / len(x_validation)
+
         if (epoch+1) %100 == 0:
-            print("Epoch [{:3d}/{:3d}], loss = {:.6f}, accuracy = {:.2%}".format(epoch + 1, TOTAL_EPOCH, loss_per_epoch, acc_per_epoch))
+            print("Epoch [{:2d}/{:2d}], train loss = {:.6f}, train accuracy = {:.2%}, valid loss = {:.6f}, valid accuracy = {:.2%}"
+                  .format(epoch + 1, TOTAL_EPOCH, loss_per_epoch, acc_per_epoch, epoch_valid_loss, epoch_valid_acc))
 
 '''
-The number of data samples :  10992
-The dimension of data samples :  16
-
-Total step :  343
-Epoch [100/1000], loss = 0.194182, accuracy = 64.91%
-Epoch [200/1000], loss = 0.119546, accuracy = 66.85%
-Epoch [300/1000], loss = 0.092185, accuracy = 67.48%
-Epoch [400/1000], loss = 0.077086, accuracy = 67.91%
-Epoch [500/1000], loss = 0.067269, accuracy = 68.15%
-Epoch [600/1000], loss = 0.060175, accuracy = 68.39%
-Epoch [700/1000], loss = 0.054855, accuracy = 68.51%
-Epoch [800/1000], loss = 0.050673, accuracy = 68.69%
-Epoch [900/1000], loss = 0.047282, accuracy = 68.75%
-Epoch [1000/1000], loss = 0.044530, accuracy = 68.90%
+Total step :  240
+Epoch [100/1000], train loss = 0.277490, train accuracy = 92.67%, valid loss = 0.244109, valid accuracy = 94.63%
+Epoch [200/1000], train loss = 0.170967, train accuracy = 95.36%, valid loss = 0.155349, valid accuracy = 96.00%
+Epoch [300/1000], train loss = 0.131892, train accuracy = 96.32%, valid loss = 0.129110, valid accuracy = 96.45%
+Epoch [400/1000], train loss = 0.109945, train accuracy = 96.91%, valid loss = 0.115636, valid accuracy = 96.72%
+Epoch [500/1000], train loss = 0.095863, train accuracy = 97.28%, valid loss = 0.105041, valid accuracy = 97.36%
+Epoch [600/1000], train loss = 0.085958, train accuracy = 97.55%, valid loss = 0.100272, valid accuracy = 97.45%
+Epoch [700/1000], train loss = 0.078748, train accuracy = 97.77%, valid loss = 0.094253, valid accuracy = 97.27%
+Epoch [800/1000], train loss = 0.072572, train accuracy = 97.90%, valid loss = 0.090324, valid accuracy = 97.54%
+Epoch [900/1000], train loss = 0.067901, train accuracy = 98.03%, valid loss = 0.087233, valid accuracy = 97.82%
+Epoch [1000/1000], train loss = 0.062622, train accuracy = 98.14%, valid loss = 0.084490, valid accuracy = 98.00%
 '''
