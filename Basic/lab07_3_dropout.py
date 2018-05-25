@@ -74,8 +74,12 @@ def relu_layer(tensor_op, output_dim, weight_decay = None, regularizer = None, k
             elif regularizer == 'l2':
                 wd = l2_loss(W)*weight_decay
             else:
-                wd = 0
-            tf.add_to_collection("weight_decay", wd)
+                wd = tf.constant(0.)
+        else:
+            wd = tf.constant(0.)
+
+        tf.add_to_collection("weight_decay", wd)
+
         if with_W:
             return h, W
         else:
