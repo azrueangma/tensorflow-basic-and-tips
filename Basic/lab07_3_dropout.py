@@ -105,8 +105,10 @@ with tf.variable_scope("Optimization"):
     loss = normal_loss + tf.reduce_sum(weight_decay_loss)
     optim = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
 
-with tf.variable_scope("Pred_and_Acc"):
+with tf.variable_scope("Prediction"):
     predict = tf.argmax(hypothesis, axis=1)
+
+with tf.variable_scope("Accuracy"):
     accuracy = tf.reduce_sum(tf.cast(tf.equal(predict, tf.argmax(Y_one_hot, axis = 1)), tf.float32))
 
 with tf.variable_scope("Summary"):
