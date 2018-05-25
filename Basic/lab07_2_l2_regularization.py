@@ -24,10 +24,6 @@ print("The number of train samples : ", ntrain)
 print("The number of validation samples : ", nvalidation)
 print("The number of test samples : ", ntest)
 
-def l1_loss (tensor_op, name='l1_loss'):
-    output = tf.reduce_sum(tf.abs(tensor_op), name = name)
-    return output
-
 def l2_loss (tensor_op, name='l2_loss'):
     output = tf.reduce_sum(tf.square(tensor_op), name = name)/2
     return output
