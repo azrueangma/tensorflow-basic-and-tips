@@ -31,7 +31,7 @@ def linear(x, output_dim, name):
         h = tf.nn.bias_add(tf.matmul(x, W), b, name = 'h')
         return h
 
-def relu_linear(x, output_dim, name):
+def relu_layer(x, output_dim, name):
     with tf.variable_scope(name):
         W = tf.get_variable(name='W', shape=[x.get_shape()[-1], output_dim], dtype=tf.float32,
                             initializer=tf.glorot_uniform_initializer())
@@ -46,9 +46,9 @@ with tf.variable_scope("Inputs"):
     Y = tf.placeholder(shape = [None, 1], dtype = tf.int32, name = 'Y')
     Y_one_hot = tf.reshape(tf.one_hot(Y, NCLASS), [-1, NCLASS], name = 'Y_one_hot')
 
-h1 = relu_linear(X, 256, 'Relu_Layer1')
-h2 = relu_linear(h1, 128, 'Relu_Layer2')
-h3 = relu_linear(h2, 64, 'Relu_Layer3')
+h1 = relu_layer(X, 256, 'Relu_Layer1')
+h2 = relu_layer(h1, 128, 'Relu_Layer2')
+h3 = relu_layer(h2, 64, 'Relu_Layer3')
 logits = linear(h1, NCLASS, 'Linear_Layer')
 
 with tf.variable_scope("Optimization"):
