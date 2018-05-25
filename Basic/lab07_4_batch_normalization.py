@@ -17,7 +17,6 @@ NCLASS = len(np.unique(y_train))
 BATCH_SIZE = 32
 
 TOTAL_EPOCH = 20
-KEEP_PROB = 0.7
 
 ntrain = len(x_train)
 nvalidation = len(x_validation)
@@ -114,12 +113,11 @@ with tf.variable_scope("Inputs"):
     X = tf.placeholder(shape = [None, INPUT_DIM], dtype=tf.float32, name='X')
     Y = tf.placeholder(shape = [None, 1], dtype=tf.int32, name='Y')
     Y_one_hot = tf.reshape(tf.one_hot(Y, NCLASS), [-1, NCLASS], name='Y_one_hot')
-    keep_prob = tf.placeholder(tf.float32, name='keep_prob')
     is_training = tf.placeholder(tf.bool, name = 'is_training')
 
-h1 = relu_layer(X, 256, keep_prob=keep_prob, is_training=is_training, name='Relu_Layer1')
-h2 = relu_layer(h1, 128, keep_prob=keep_prob, is_training=is_training, name='Relu_Layer2')
-h3 = relu_layer(h2, 64, keep_prob=keep_prob, is_training=is_training, name='Relu_Layer3')
+h1 = relu_layer(X, 256, is_training=is_training, name='Relu_Layer1')
+h2 = relu_layer(h1, 128, is_training=is_training, name='Relu_Layer2')
+h3 = relu_layer(h2, 64, is_training=is_training, name='Relu_Layer3')
 logits = linear(h1, NCLASS, name='Linear_Layer')
 
 with tf.variable_scope("Optimization"):
@@ -169,7 +167,7 @@ with tf.Session() as sess:
             s = BATCH_SIZE*step
             t = BATCH_SIZE*(step+1)
             a, l, _ = sess.run([accuracy, loss, optim],
-                               feed_dict={X:x_train[mask[s:t],:], Y:y_train[mask[s:t],:], keep_prob:1.0, is_training:True})
+                               feed_dict={X:x_train[mask[s:t],:], Y:y_train[mask[s:t],:], is_training:True})
             loss_per_epoch += l
             acc_per_epoch += a
         epoch_end_time = time.perf_counter()
@@ -177,7 +175,7 @@ with tf.Session() as sess:
         loss_per_epoch /= total_step*BATCH_SIZE
         acc_per_epoch /= total_step*BATCH_SIZE
 
-        va, vl = sess.run([accuracy, loss], feed_dict={X:x_validation, Y:y_validation, keep_prob:1.0, is_training:False})
+        va, vl = sess.run([accuracy, loss], feed_dict={X:x_validation, Y:y_validation, is_training:False})
         epoch_valid_acc = va / len(x_validation)
         epoch_valid_loss = vl / len(x_validation)
 
@@ -196,7 +194,7 @@ with tf.Session() as sess:
     print("Duration for train : {:.6f}(s)".format(train_duration))
     print("<<< Train Finished >>>")
 
-    ta = sess.run(accuracy, feed_dict = {X:x_test, Y:y_test, keep_prob : 1.0, is_training:False})
+    ta = sess.run(accuracy, feed_dict = {X:x_test, Y:y_test, is_training:False})
     print("Test Accraucy : {:.2%}".format(ta/ntest))
 
 '''
