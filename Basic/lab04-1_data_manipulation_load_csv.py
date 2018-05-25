@@ -19,13 +19,13 @@ print("The total number of test samples : {}".format(ntest))
 print("The dimension of samples : {}".format(ndim))
 print("The number of classes : {}".format(nclass))
 
+#numpy to csv
 np.savetxt(fname = './data/lab04_2/pendigits_train_x.csv', X = x_train, fmt = "%d", delimiter = ',')
 np.savetxt(fname = './data/lab04_2/pendigits_train_y.csv', X = y_train, fmt = "%d", delimiter = ',')
 np.savetxt(fname = './data/lab04_2/pendigits_test_x.csv', X = x_test, fmt = "%d", delimiter = ',')
 np.savetxt(fname = './data/lab04_2/pendigits_test_y.csv', X = y_test, fmt = "%d", delimiter = ',')
 
 '''
-=== numpy ===
 The total number of train samples : 7494
 The total number of test samples : 3498
 The dimension of samples : 16
@@ -47,6 +47,7 @@ pd_ntest = np.size(pd_x_test, 0)
 pd_ndim = np.size(pd_x_train,1)
 pd_nclass = len(np.unique(pd_y_train))
 
+#DataFrame to csv
 pd_pendigits_train.to_csv('./data/lab04_2/pd_pendigits_train.csv', header = False, index = False)
 pd_pendigits_test.to_csv('./data/lab04_2/pd_pendigits_test.csv', header = False, index = False)
 
@@ -55,11 +56,3 @@ print("The total number of train samples : {}".format(pd_ntrain))
 print("The total number of test samples : {}".format(pd_ntest))
 print("The dimension of samples : {}".format(pd_ndim))
 print("The number of classes : {}".format(pd_nclass))
-
-'''
-=== pandas ===
-The total number of train samples : 7494
-The total number of test samples : 3498
-The dimension of samples : 16
-The number of classes : 10
-'''
