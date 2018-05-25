@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
+#for Big Data
 def MinMaxScaler(x):
     col_min = np.min(x, axis = 0)
     col_max = np.max(x, axis = 0)
@@ -10,6 +11,7 @@ def MinMaxScaler(x):
 
 SEED = 0
 
+#Assume that each pendigits data samples is too large to be loaded
 pendigits_train = np.loadtxt('./data/pendigits_train.csv', delimiter = ',')
 pendigits_test = np.loadtxt('./data/pendigits_test.csv', delimiter = ',')
 
@@ -32,4 +34,3 @@ for i in range(len(pendigits_train)):
         }))
     writer.write(example.SerializeToString())
 writer.close()
-
