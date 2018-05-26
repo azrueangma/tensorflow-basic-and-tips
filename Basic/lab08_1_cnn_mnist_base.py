@@ -100,6 +100,7 @@ def relu_layer(tensor_op, output_dim, weight_decay=None, regularizer=None,
         else:
             return dr
 
+        
 def conv2d(tensor_op, stride_w, stride_h, shape, name='Conv'):
     with tf.variable_scope(name):
         W = tf.get_variable(name='W', shape=shape, dtype=tf.float32,
@@ -110,11 +111,13 @@ def conv2d(tensor_op, stride_w, stride_h, shape, name='Conv'):
         h = tf.nn.relu(tf.nn.bias_add(conv, b), name = 'h')
     return h
 
+
 def max_pooling(tensor_op, ksize_w, ksize_h, stride_w, stride_h, name='MaxPool'):
     with tf.variable_scope(name):
         p = tf.nn.max_pool(tensor_op, ksize=[1,ksize_w, ksize_h,1], strides=[1,stride_w, stride_h,1], padding='SAME', name='p')
     return p    
-                        
+                   
+    
 with tf.variable_scope("Inputs"):
     X = tf.placeholder(shape = [None, image_width, image_height, 1], dtype = tf.float32, name = 'X')
     Y = tf.placeholder(shape = [None, 1], dtype = tf.int32, name = 'Y')
@@ -245,12 +248,3 @@ Duration for train : 7940.431499(s)
 <<< Train Finished >>>
 Test Accraucy : 98.01%
 '''
-
-
-
-
-
-
-    
-
-    
