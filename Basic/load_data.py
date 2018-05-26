@@ -117,7 +117,7 @@ def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
         data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
         data = data[8:]
         if as_image == True:
-            x_train = data.reshape(60000, 28, 28)
+            x_train = data.reshape(60000, 28, 28, 1)
         else:
             x_train = data.reshape(60000, 784)
 
@@ -132,7 +132,7 @@ def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
         data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
         data = data[8:]
         if as_image == True:
-            x_test = data.reshape(10000, 28, 28)
+            x_test = data.reshape(10000, 28, 28, 1)
         else:
             x_test = data.reshape(10000, 784)
 
