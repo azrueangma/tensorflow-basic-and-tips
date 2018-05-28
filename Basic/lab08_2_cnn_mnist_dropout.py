@@ -122,6 +122,7 @@ def dropout_layer(tensor_op, keep_prob, name):
         d = tf.nn.dropout(tensor_op, keep_prob=keep_prob, name = 'd')
     return d
 
+
 with tf.variable_scope("Inputs"):
     X = tf.placeholder(shape=[None, image_width, image_height, 1], dtype=tf.float32, name='X')
     Y = tf.placeholder(shape=[None, 1], dtype=tf.int32, name='Y')
