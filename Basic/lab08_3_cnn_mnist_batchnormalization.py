@@ -12,7 +12,7 @@ import load_data
 x_train, x_validation, x_test, y_train, y_validation, y_test = load_data.load_mnist('./data/mnist/', seed=0,
                                                                                     as_image=True, scaling=True)
 
-BOARD_PATH = "./board/lab08-4_board"
+BOARD_PATH = "./board/lab08-3_board"
 INPUT_DIM = np.size(x_train, 1)
 NCLASS = len(np.unique(y_train))
 BATCH_SIZE = 32
