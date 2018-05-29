@@ -46,3 +46,10 @@ lab04-4 average of losses and accuracies per Epoch
 :---: | :---: |
 Sigmoid  (lab05_1) | <img src = 'image/lab05_1_results.PNG' height = '150px' width = '800px'> 
 
+## CNN MNIST
+
+lab08-1 and lab08-2 comparision
+:---: 
+<p align="center">
+<img src = 'image/lab08_learning_rate_decay_comparison.PNG' height = '200px' width = '500px'> 
+</p>
