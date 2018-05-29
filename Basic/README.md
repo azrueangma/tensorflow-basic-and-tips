@@ -50,5 +50,5 @@ Sigmoid  (lab05_1) | <img src = 'image/lab05_1_results.PNG' height = '150px' wid
 
 lab08-1 and lab08-2 comparision
 :---: 
-<img src = 'image/lab08_learning_rate_decay_comparison.PNG' height = '600px' width = '500px'> 
+<img src = 'image/lab08_learning_rate_decay_comparison.PNG' height = '200px' width = '1000px'> 
 
