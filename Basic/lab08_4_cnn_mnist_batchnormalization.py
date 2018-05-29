@@ -182,6 +182,7 @@ with tf.Session() as sess:
     sess.run(init_op)
 
     train_start_time = time.perf_counter()
+    u = INIT_LEARNING_RATE
     for epoch in range(TOTAL_EPOCH):
         loss_per_epoch = 0
         acc_per_epoch = 0
@@ -190,7 +191,6 @@ with tf.Session() as sess:
         mask = np.random.permutation(len(x_train))
 
         epoch_start_time = time.perf_counter()
-        u = INIT_LEARNING_RATE
         for step in range(total_step):
             s = BATCH_SIZE * step
             t = BATCH_SIZE * (step + 1)
