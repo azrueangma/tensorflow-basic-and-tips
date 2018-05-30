@@ -7,6 +7,7 @@ import sys
 import tarfile
 import zipfile
 
+
 def MinMaxScaler(x):
     col_min = np.min(x, axis = 0)
     col_max = np.max(x, axis = 0)
@@ -14,16 +15,19 @@ def MinMaxScaler(x):
     numerator = x - col_min
     return numerator/denominator, col_min, col_max
 
+
 def MinMaxScaler_with(cur_col, min_col, max_col):
     numerator = cur_col - min_col
     denominator = max_col - min_col
     return numerator / (denominator + 1e-7)
+
 
 def unpickle(file):
     import pickle
     with open(file, 'rb') as fo:
         dict = pickle.load(fo, encoding='bytes')
     return dict
+
 
 def print_download_progress(count, block_size, total_size):
     decimals = 1
@@ -40,6 +44,7 @@ def print_download_progress(count, block_size, total_size):
         sys.stdout.write('\n')
     sys.stdout.flush()
 
+    
 def generate_data_for_linear_regression(npoints):
     for i in range(npoints):
         np.random.seed(i)
@@ -74,6 +79,7 @@ def generate_data_for_two_class_classification(npoints):
     trainY = np.expand_dims(vectors[:, 1], axis=1)
     return trainX, trainY.astype(int)
 
+
 def generate_data_for_multi_class_classification(seed=0, scaling = False):
     digits = load_digits()
     trainX = digits['data']
@@ -83,6 +89,7 @@ def generate_data_for_multi_class_classification(seed=0, scaling = False):
     np.random.seed(seed)
     mask = np.random.permutation(len(trainX))
     return trainX[mask], np.expand_dims(trainY[mask], axis=1)
+
 
 #from UCI data set
 def load_pendigits(seed = 0, scaling = False):
@@ -121,6 +128,7 @@ def load_pendigits(seed = 0, scaling = False):
 
     return x_train, x_validation, x_test, y_train, y_validation, y_test
 
+
 def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
     if not os.path.exists(save_path):
         os.makedirs(save_path)
@@ -132,7 +140,6 @@ def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
             file_path, _ = urllib.request.urlretrieve(url=data_url+file_name, filename = save_path+file_name, reporthook=print_download_progress)
         else:
             print(">>> {} data has apparently already been downloaded".format(file_name))
-
 
     with gzip.open(save_path+'train-images-idx3-ubyte.gz') as bytestream:
         bytestream.read(16)
@@ -185,6 +192,7 @@ def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
     else:
         return x_train, x_validation, x_test, y_train, y_validation, y_test
 
+    
 def load_cifar(save_path, seed = 0, as_image = False, scaling = False):
     url = "https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz"
     filename = url.split('/')[-1]
