@@ -2,7 +2,7 @@
 ## lab07
  *Paper Link* | *Name* | *Author*
 :---: | :---: | :---:|
-[Arxiv](https://arxiv.org/abs/1502.03167) | ## Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift |Sergey Ioffe, Christian Szegedy
+[Arxiv](https://arxiv.org/abs/1502.03167) | Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift |Sergey Ioffe, Christian Szegedy
 
 
 ## regression
