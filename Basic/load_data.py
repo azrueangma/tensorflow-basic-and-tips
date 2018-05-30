@@ -2,8 +2,9 @@ import numpy as np
 from sklearn.datasets import load_digits
 import gzip
 import os
-import sys
 import urllib.request
+import sys
+import time
 
 def MinMaxScaler(x):
     col_min = np.min(x, axis = 0)
@@ -98,17 +99,30 @@ def load_pendigits(seed = 0, scaling = False):
 
     return x_train, x_validation, x_test, y_train, y_validation, y_test
 
+def print_download_progress(count, block_size, total_size):
+    decimals = 1
+    format_str = "{0:."+str(decimals)+"f}"
+    bar_length = 100
+    pct_complete = format_str.format((float(count * block_size) / total_size)*100)
+    total = int(total_size/block_size)+1
+    filled_length = int(round(bar_length*count/total))
+    if float(pct_complete) > 100.:
+        pct_complete = "100"
+    bar = '#'*filled_length+'-'*(bar_length-filled_length)
+    sys.stdout.write('\r |%s| %s%s ' % (bar,  pct_complete, '%')),
+    if pct_complete == 1.0:
+        sys.stdout.write('\n')
+    sys.stdout.flush()
 
 def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
-
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     data_url = 'http://yann.lecun.com/exdb/mnist/'
     file_names = ['train-images-idx3-ubyte.gz', 'train-labels-idx1-ubyte.gz','t10k-images-idx3-ubyte.gz','t10k-labels-idx1-ubyte.gz']
     for file_name in file_names:
         if not os.path.exists(save_path+file_name):
-            print(">>> Download : "+file_name)
-            file_path, _ = urllib.request.urlretrieve(url=data_url+file_name, filename = save_path+file_name)
+            print("\n>>> Download "+file_name+" : ")
+            file_path, _ = urllib.request.urlretrieve(url=data_url+file_name, filename = save_path+file_name, reporthook=print_download_progress)
         else:
             print(">>> {} data has apparently already been downloaded".format(file_name))
 
