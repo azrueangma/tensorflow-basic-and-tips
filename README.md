@@ -1,7 +1,7 @@
 # Basic
 
 ## Table of Contents
-* [lab01] Basic regression
+* ### [lab01] Basic regression
 * [lab02] Basic classification 
 * [lab03] Usage of tensorboard
 * [lab04] Data manipulation
