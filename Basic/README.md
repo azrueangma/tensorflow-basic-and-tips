@@ -57,7 +57,7 @@ Sigmoid  (lab05_1) | <img src = 'image/lab05_1_results.PNG' height = '150px' wid
 
 *MNIST* | *CIFAR10*
 :---: |:---: |
-<img src = 'image/mnist.jpg' height = '400px' width = '600px'> | <img src = 'image/cifar.jpg' height = '400px' width = '600px'> 
+<img src = 'image/mnist.jpg' height = '300px' width = '600px'> | <img src = 'image/cifar.jpg' height = '300px' width = '600px'> 
 
 ## CNN MNIST
 
