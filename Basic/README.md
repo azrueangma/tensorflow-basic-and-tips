@@ -53,7 +53,8 @@ Sigmoid  (lab05_1) | <img src = 'image/lab05_1_results.PNG' height = '150px' wid
 
 ## MNIST and CIFAR10
 
-lab08-0
+### lab08-0
+
 *MNIST* | *CIFAR10*
 :---: |:---: |
 <img src = 'image/mnist.jpg' height = '200px' width = '500px'> 
