@@ -51,6 +51,14 @@ lab04-4 average of losses and accuracies per Epoch
 :---: | :---: |
 Sigmoid  (lab05_1) | <img src = 'image/lab05_1_results.PNG' height = '150px' width = '800px'> 
 
+## MNIST and CIFAR10
+
+lab08-0
+*MNIST* | *CIFAR10*
+:---: |:---: |
+<img src = 'image/mnist.jpg' height = '200px' width = '500px'> 
+<img src = 'image/cifar.jpg' height = '200px' width = '500px'> 
+
 ## CNN MNIST
 
 lab08-1 and lab08-2 comparision
