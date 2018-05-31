@@ -18,6 +18,7 @@ NCLASS = len(np.unique(y_train))
 BATCH_SIZE = 32
 
 TOTAL_EPOCH = 30
+ALPHA = 0
 INIT_LEARNING_RATE = 0.001
 
 ntrain = len(x_train)
@@ -42,7 +43,7 @@ def l2_loss(tensor_op, name='l2_loss'):
     return output
 
 
-def linear(tensor_op, output_dim, weight_decay=None, regularizer=None, with_W=False, name='linear'):
+def linear(tensor_op, output_dim, weight_decay=False, regularizer=None, with_W=False, name='linear'):
     with tf.variable_scope(name):
         W = tf.get_variable(name='W', shape=[tensor_op.get_shape()[-1], output_dim], dtype=tf.float32,
                             initializer=tf.glorot_uniform_initializer())
@@ -52,9 +53,9 @@ def linear(tensor_op, output_dim, weight_decay=None, regularizer=None, with_W=Fa
 
         if weight_decay:
             if regularizer == 'l1':
-                wd = l1_loss(W) * weight_decay
+                wd = l1_loss(W)
             elif regularizer == 'l2':
-                wd = l2_loss(W) * weight_decay
+                wd = l2_loss(W)
             else:
                 wd = tf.constant(0.)
         else:
@@ -68,7 +69,7 @@ def linear(tensor_op, output_dim, weight_decay=None, regularizer=None, with_W=Fa
             return h
 
 
-def relu_layer(tensor_op, output_dim, weight_decay=None, regularizer=None,
+def relu_layer(tensor_op, output_dim, weight_decay=False, regularizer=None,
                keep_prob=1.0, is_training=False, with_W=False, name='relu_layer'):
     with tf.variable_scope(name):
         W = tf.get_variable(name='W', shape=[tensor_op.get_shape()[-1], output_dim], dtype=tf.float32,
@@ -84,9 +85,9 @@ def relu_layer(tensor_op, output_dim, weight_decay=None, regularizer=None,
 
         if weight_decay:
             if regularizer == 'l1':
-                wd = l1_loss(W) * weight_decay
+                wd = l1_loss(W)
             elif regularizer == 'l2':
-                wd = l2_loss(W) * weight_decay
+                wd = l2_loss(W)
             else:
                 wd = tf.constant(0.)
         else:
@@ -140,7 +141,7 @@ with tf.variable_scope("Optimization"):
     normal_loss = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits, labels=Y_one_hot),
                                 name='loss')
     weight_decay_loss = tf.get_collection("weight_decay")
-    loss = normal_loss + tf.reduce_sum(weight_decay_loss)
+    loss = normal_loss + ALPHA*tf.reduce_sum(weight_decay_loss)
     optim = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss)
 
 with tf.variable_scope("Prediction"):
