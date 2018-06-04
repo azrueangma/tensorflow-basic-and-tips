@@ -163,4 +163,4 @@ with tf.Session() as sess:
         loss_per_epoch /= total_step * BATCH_SIZE
         acc_per_epoch /= total_step * BATCH_SIZE
 
-    saver.save(MODEL_DIR+"my_model_{}/model".format(epoch))
+        saver.save(sess, MODEL_DIR+"my_model_{}/model".format(epoch))
