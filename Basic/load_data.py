@@ -1,19 +1,24 @@
-import numpy as np
-from sklearn.datasets import load_digits
 import gzip
-import os
-import urllib.request
 import sys
 import tarfile
 import zipfile
+import os
+import re
+import io
+import requests
+import numpy as np
+import urllib.request
+import tensorflow as tf
+from zipfile import ZipFile
+from sklearn.datasets import load_digits
 
 
 def MinMaxScaler(x):
-    col_min = np.min(x, axis = 0)
-    col_max = np.max(x, axis = 0)
+    col_min = np.min(x, axis=0)
+    col_max = np.max(x, axis=0)
     denominator = (col_max - col_min) + 1e-7
     numerator = x - col_min
-    return numerator/denominator, col_min, col_max
+    return numerator / denominator, col_min, col_max
 
 
 def MinMaxScaler_with(cur_col, min_col, max_col):
@@ -31,20 +36,20 @@ def unpickle(file):
 
 def print_download_progress(count, block_size, total_size):
     decimals = 1
-    format_str = "{0:."+str(decimals)+"f}"
+    format_str = "{0:." + str(decimals) + "f}"
     bar_length = 100
-    pct_complete = format_str.format((float(count * block_size) / total_size)*100)
-    total = int(total_size/block_size)+1
-    filled_length = int(round(bar_length*count/total))
+    pct_complete = format_str.format((float(count * block_size) / total_size) * 100)
+    total = int(total_size / block_size) + 1
+    filled_length = int(round(bar_length * count / total))
     if float(pct_complete) > 100.:
         pct_complete = "100"
-    bar = '#'*filled_length+'-'*(bar_length-filled_length)
-    sys.stdout.write('\r |%s| %s%s ' % (bar,  pct_complete, '%')),
+    bar = '#' * filled_length + '-' * (bar_length - filled_length)
+    sys.stdout.write('\r |%s| %s%s ' % (bar, pct_complete, '%')),
     if pct_complete == 1.0:
         sys.stdout.write('\n')
     sys.stdout.flush()
 
-    
+
 def generate_data_for_linear_regression(npoints):
     for i in range(npoints):
         np.random.seed(i)
@@ -60,6 +65,7 @@ def generate_data_for_linear_regression(npoints):
     trainX = np.expand_dims(vectors[:, 0], axis=1)
     trainY = np.expand_dims(vectors[:, 1], axis=1)
     return trainX, trainY
+
 
 def generate_data_for_two_class_classification(npoints):
     for i in range(npoints):
@@ -80,41 +86,40 @@ def generate_data_for_two_class_classification(npoints):
     return trainX, trainY.astype(int)
 
 
-def generate_data_for_multi_class_classification(seed=0, scaling = False):
+def generate_data_for_multi_class_classification(seed=0, scaling=False):
     digits = load_digits()
     trainX = digits['data']
     if scaling == True:
-        trainX,_ ,_ = MinMaxScaler(trainX)
+        trainX, _, _ = MinMaxScaler(trainX)
     trainY = digits['target']
     np.random.seed(seed)
     mask = np.random.permutation(len(trainX))
     return trainX[mask], np.expand_dims(trainY[mask], axis=1)
 
 
-#from UCI data set
-def load_pendigits(seed = 0, scaling = False):
+# from UCI data set
+def load_pendigits(seed=0, scaling=False):
+    pendigits_train = np.loadtxt('./data/pendigits_train.csv', delimiter=',')
+    pendigits_test = np.loadtxt('./data/pendigits_test.csv', delimiter=',')
 
-    pendigits_train = np.loadtxt('./data/pendigits_train.csv', delimiter = ',')
-    pendigits_test = np.loadtxt('./data/pendigits_test.csv', delimiter = ',')
-
-    pendigits_data = np.append(pendigits_train, pendigits_test, axis = 0)
+    pendigits_data = np.append(pendigits_train, pendigits_test, axis=0)
     nsamples = np.size(pendigits_data, 0)
 
     np.random.seed(seed)
     mask = np.random.permutation(nsamples)
     pendigits_data = pendigits_data[mask]
 
-    x_data = pendigits_data[:,:-1]
-    y_data = pendigits_data[:,[-1]].astype(int)
+    x_data = pendigits_data[:, :-1]
+    y_data = pendigits_data[:, [-1]].astype(int)
 
     ndim = np.size(x_data, 1)
 
-    ntrain = int(nsamples*0.7)
-    nvalidation = int(nsamples*0.1)
-    ntest = nsamples-ntrain-nvalidation
+    ntrain = int(nsamples * 0.7)
+    nvalidation = int(nsamples * 0.1)
+    ntest = nsamples - ntrain - nvalidation
 
     x_train = x_data[:ntrain]
-    x_validation = x_data[ntrain:(ntrain+nvalidation)]
+    x_validation = x_data[ntrain:(ntrain + nvalidation)]
     x_test = x_data[-ntest:]
 
     if scaling == True:
@@ -123,25 +128,27 @@ def load_pendigits(seed = 0, scaling = False):
         x_test = MinMaxScaler_with(x_test, train_min_col, train_max_col)
 
     y_train = y_data[:ntrain]
-    y_validation = y_data[ntrain:(ntrain+nvalidation)]
+    y_validation = y_data[ntrain:(ntrain + nvalidation)]
     y_test = y_data[-ntest:]
 
     return x_train, x_validation, x_test, y_train, y_validation, y_test
 
 
-def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
+def load_mnist(save_path, seed=0, as_image=False, scaling=False):
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     data_url = 'http://yann.lecun.com/exdb/mnist/'
-    file_names = ['train-images-idx3-ubyte.gz', 'train-labels-idx1-ubyte.gz','t10k-images-idx3-ubyte.gz','t10k-labels-idx1-ubyte.gz']
+    file_names = ['train-images-idx3-ubyte.gz', 'train-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz',
+                  't10k-labels-idx1-ubyte.gz']
     for file_name in file_names:
-        if not os.path.exists(save_path+file_name):
-            print("\n>>> Download "+file_name+" : ")
-            file_path, _ = urllib.request.urlretrieve(url=data_url+file_name, filename = save_path+file_name, reporthook=print_download_progress)
+        if not os.path.exists(save_path + file_name):
+            print("\n>>> Download " + file_name + " : ")
+            file_path, _ = urllib.request.urlretrieve(url=data_url + file_name, filename=save_path + file_name,
+                                                      reporthook=print_download_progress)
         else:
             print(">>> {} data has apparently already been downloaded".format(file_name))
 
-    with gzip.open(save_path+'train-images-idx3-ubyte.gz') as bytestream:
+    with gzip.open(save_path + 'train-images-idx3-ubyte.gz') as bytestream:
         bytestream.read(16)
         buf = bytestream.read(28 * 28 * 60000)
         data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
@@ -151,14 +158,14 @@ def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
         else:
             x_train = data.reshape(60000, 784)
 
-    with gzip.open(save_path+'train-labels-idx1-ubyte.gz') as bytestream:
+    with gzip.open(save_path + 'train-labels-idx1-ubyte.gz') as bytestream:
         bytestream.read(8)
         buf = bytestream.read(60000)
         data = np.frombuffer(buf, dtype=np.uint8)
         data = data
         y_train = np.expand_dims(data, 1)
 
-    with gzip.open(save_path+'t10k-images-idx3-ubyte.gz') as bytestream:
+    with gzip.open(save_path + 't10k-images-idx3-ubyte.gz') as bytestream:
         bytestream.read(16)
         buf = bytestream.read(28 * 28 * 10000)
         data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
@@ -168,7 +175,7 @@ def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
         else:
             x_test = data.reshape(10000, 784)
 
-    with gzip.open(save_path+'t10k-labels-idx1-ubyte.gz') as bytestream:
+    with gzip.open(save_path + 't10k-labels-idx1-ubyte.gz') as bytestream:
         bytestream.read(8)
         buf = bytestream.read(10000)
         data = np.frombuffer(buf, dtype=np.uint8)
@@ -180,20 +187,20 @@ def load_mnist(save_path, seed = 0, as_image = False, scaling = False):
     x_train = x_train[mask]
     y_train = y_train[mask]
 
-    ntrain = int(len(x_train)*0.9)
-    nvalidation = len(x_train)-ntrain
+    ntrain = int(len(x_train) * 0.9)
+    nvalidation = len(x_train) - ntrain
     x_validation = x_train[:nvalidation]
     y_validation = y_train[:nvalidation]
     x_train = x_train[nvalidation:]
     y_train = y_train[nvalidation:]
 
     if scaling == True:
-        return x_train/255., x_validation/255., x_test/255., y_train, y_validation, y_test
+        return x_train / 255., x_validation / 255., x_test / 255., y_train, y_validation, y_test
     else:
         return x_train, x_validation, x_test, y_train, y_validation, y_test
 
-    
-def load_cifar(save_path, seed = 0, as_image = False, scaling = False):
+
+def load_cifar(save_path, seed=0, as_image=False, scaling=False):
     url = "https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz"
     filename = url.split('/')[-1]
     file_path = os.path.join(save_path, filename)
@@ -213,15 +220,15 @@ def load_cifar(save_path, seed = 0, as_image = False, scaling = False):
         print(">>> Data has apparently already been downloaded and unpacked.")
 
     name = 'data_batch_1'
-    batch = unpickle(save_path+"cifar-10-batches-py/{}".format(name))
+    batch = unpickle(save_path + "cifar-10-batches-py/{}".format(name))
     x_train = batch[b'data']
     y_train = batch[b'labels']
     for name in ['data_batch_2', 'data_batch_3', 'data_batch_4', 'data_batch_5']:
-        batch = unpickle(save_path+"cifar-10-batches-py/{}".format(name))
+        batch = unpickle(save_path + "cifar-10-batches-py/{}".format(name))
         x_train = np.append(x_train, batch[b'data'], axis=0)
         y_train = np.append(y_train, batch[b'labels'], axis=0)
 
-    test = unpickle(save_path+"cifar-10-batches-py/test_batch")
+    test = unpickle(save_path + "cifar-10-batches-py/test_batch")
     x_test = test[b'data']
     y_test = test[b'labels']
 
@@ -245,6 +252,72 @@ def load_cifar(save_path, seed = 0, as_image = False, scaling = False):
     y_train = y_train[nvalidation:]
 
     if scaling == True:
-        return x_train/255., x_validation/255., x_test/255., y_train, y_validation, y_test
+        return x_train / 255., x_validation / 255., x_test / 255., y_train, y_validation, y_test
     else:
         return x_train, x_validation, x_test, y_train, y_validation, y_test
+
+
+def load_spam_data(data_dir='./data', data_file='text_data.txt', seed=0):
+
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
+    if not os.path.isfile(os.path.join(data_dir, data_file)):
+        zip_url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip'
+        r = requests.get(zip_url)
+        z = ZipFile(io.BytesIO(r.content))
+        file = z.read('SMSSpamCollection')
+        text_data = file.decode()
+        text_data = text_data.encode('ascii', errors='ignore')
+        text_data = text_data.decode().split('\n')
+
+        with open(os.path.join(data_dir, data_file), 'w') as file_conn:
+            for text in text_data:
+                file_conn.write("{}\n".format(text))
+    else:
+        text_data = []
+        with open(os.path.join(data_dir, data_file), 'r') as file_conn:
+            for row in file_conn:
+                text_data.append(row)
+        text_data = text_data[:-1]
+
+    text_data = [x.split('\t') for x in text_data if len(x) >= 1]
+    [text_data_target, text_data_train] = [list(x) for x in zip(*text_data)]
+
+    def clean_text(text_string):
+        text_string = re.sub(r'([^\s \w]|_|[0-9])+', '', text_string)
+        text_string = " ".join(text_string.split())
+        text_string = text_string.lower()
+        return (text_string)
+
+    max_sequence_length = 25
+    min_word_frequency = 10
+
+    text_data_train = [clean_text(x) for x in text_data_train]
+    vocab_processor = tf.contrib.learn.preprocessing.VocabularyProcessor(max_sequence_length,
+                                                                         min_frequency=min_word_frequency)
+    text_processed = np.array(list(vocab_processor.fit_transform(text_data_train)))
+    text_processed = np.array(text_processed)
+
+    np.random.seed(seed)
+    mask = np.random.permutation(len(text_data_target))
+    x_data = text_processed[mask]
+    text_dics = {'ham': 0, 'spam': 1}
+    text_data_target = np.expand_dims(np.array([text_dics[v] for v in text_data_target]), axis=1)
+    y_data = text_data_target[mask]
+
+    n_train = int(len(x_data) * 0.7)
+    n_validation = int(len(x_data) * 0.1)
+    n_test = len(x_data) - n_train - n_validation
+
+    x_train = x_data[:n_train]
+    x_validation = x_data[n_train:n_train + n_validation]
+    x_test = x_data[-n_test:]
+
+    y_train = y_data[:n_train]
+    y_validation = y_data[n_train:n_train + n_validation]
+    y_test = y_data[-n_test:]
+
+    vocab_size = len(vocab_processor.vocabulary_)
+
+    return x_train, x_validation, x_test, y_train, y_validation, y_test, vocab_size
