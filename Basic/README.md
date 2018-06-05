@@ -7,7 +7,7 @@ lab07_4 | [Batch Normalization: Accelerating Deep Network Training by Reducing I
 
 ## lab09
 *LAB* | *Name* | *Author*
-:---: | :---: | :---:|
+:---: | :-----: | :---:|
 lab09_2 | [LONG SHORT-TERM MEMORY](http://www.bioinf.jku.at/publications/older/2604.pdf) |Sepp Hochreiter,Jurgen Schmidhuber
 lab09_3 | [Learning to Forget: Continual Prediction with LSTM](https://pdfs.semanticscholar.org/1154/0131eae85b2e11d53df7f1360eeb6476e7f4.pdf) | Felix A. Gers, Jurgen Schmidhuber, Fred Cummins
 lab09_4 | [On the difficulty of training recurrent neural networks](http://proceedings.mlr.press/v28/pascanu13.pdf) | Razvan Pascanu, Tomas Mikolov, Yoshua Bengio
