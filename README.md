@@ -2,7 +2,7 @@
 
 --------------------------------------------------------------------------------
 
-# Table of Contents
+# tensorflow-basic-and-advanced
 
 ## Basic
 
