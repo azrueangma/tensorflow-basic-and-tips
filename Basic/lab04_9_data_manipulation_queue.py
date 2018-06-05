@@ -46,7 +46,7 @@ def sigmoid_layer(x, output_dim, name):
 DEFAULT_DIR = "D:/STUDY/2018/MYT/tensorflow-basic-and-tips/Basics/data/lab04_7"
 BOARD_PATH = "./board/lab04-9_board"
 BATCH_SIZE = 32
-TOTAL_EPOCH = 1000
+TOTAL_EPOCH = 30
 INPUT_DIM = 16
 NCLASS = 10
 
@@ -73,8 +73,13 @@ with g.as_default():
         x_mini_batch, y_mini_batch = tf.train.batch([x_mini_batch_op, y_mini_batch_op], batch_size=BATCH_SIZE)
 
     with tf.variable_scope("Inputs"):
+        '''
+        #When using feed_dict
         X = tf.placeholder(shape=[None, INPUT_DIM], dtype=tf.float32, name='X')
         Y = tf.placeholder(shape=[None, 1], dtype=tf.int32, name='Y')
+        '''
+        X = x_mini_batch
+        Y = y_mini_batch
         Y_one_hot = tf.reshape(tf.one_hot(Y, NCLASS), [-1, NCLASS], name='Y_one_hot')
 
     h1 = sigmoid_layer(X, 32, 'FC_Layer1')
@@ -118,8 +123,13 @@ with g.as_default():
             for step in range(total_step):
                 s = BATCH_SIZE * step
                 t = BATCH_SIZE * (step + 1)
+                '''
+                #using feed_dict
                 x_batch, y_batch = sess.run([x_mini_batch, y_mini_batch])
                 a, l, _ = sess.run([accuracy, loss, optim], feed_dict={X: x_batch, Y: y_batch})
+                '''
+                #don't use feed_dict
+                a, l, _ = sess.run([accuracy, loss, optim])
                 loss_per_epoch += l
                 acc_per_epoch += a
             epoch_end_time = time.perf_counter()
@@ -129,8 +139,9 @@ with g.as_default():
 
             s = sess.run(merged, feed_dict={avg_loss: loss_per_epoch, avg_acc: acc_per_epoch})
             writer.add_summary(s, global_step=epoch)
-            if (epoch + 1) % 100 == 0:
-                print("Epoch [{:3d}/{:3d}], train loss = {:.6f}, train accuracy = {:.2%}, duration = {:.6f}(s)".format(epoch + 1, TOTAL_EPOCH, loss_per_epoch, acc_per_epoch, epoch_duration))
+            if (epoch + 1) % 1 == 0:
+                print("Epoch [{:3d}/{:3d}], train loss = {:.6f}, train accuracy = {:.2%}, duration = {:.6f}(s)".
+                      format(epoch + 1, TOTAL_EPOCH, loss_per_epoch, acc_per_epoch, epoch_duration))
 
         train_end_time = time.perf_counter()
         train_duration = train_end_time - train_start_time
