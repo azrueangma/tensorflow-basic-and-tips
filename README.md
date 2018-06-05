@@ -12,12 +12,12 @@ tensorflow with deep learning
   + [lab01-2] linear regression get_variable
   + [lab01-3] linear regression using function
   + [lab01-4] linear regression compute gradient
-* [lab02] Basic classification 
-* [lab03] Usage of tensorboard
-* [lab04] Data manipulation
-* [lab05] Activation functions
-* [lab06] Optimizers
-* [lab07] Regularization
-* [lab08] CNN
-* [lab09] RNN
-* [lab10] Some Techniques
+* ### [lab02] Basic classification 
+* ### [lab03] Usage of tensorboard
+* ### [lab04] Data manipulation
+* ### [lab05] Activation functions
+* ### [lab06] Optimizers
+* ### [lab07] Regularization
+* ### [lab08] CNN
+* ###[lab09] RNN
+* ### [lab10] Some Techniques
