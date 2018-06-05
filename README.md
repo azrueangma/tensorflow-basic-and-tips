@@ -1,8 +1,12 @@
+<p align="center"><img width="40%" src="logo/tensorflow_logo.png" /></p>
+
+--------------------------------------------------------------------------------
+
 # Basic
 
 ## Table of Contents
-* ### [lab01] Basic regression
-* ### [lab02] Basic classification 
+*  [lab01] Basic regression
+* [lab02] Basic classification 
 * ### [lab03] Usage of tensorboard
 * ### [lab04] Data manipulation
 * ### [lab05] Activation functions
