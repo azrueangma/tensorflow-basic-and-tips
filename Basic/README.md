@@ -1,6 +1,6 @@
 # Paper List
 ## lab07
- *Paper Link* | *Name* | *Author*
+*Name* | *Author*
 :---: | :---:|
 Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift(https://arxiv.org/abs/1502.03167) |Sergey Ioffe, Christian Szegedy
 
