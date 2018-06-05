@@ -2,7 +2,7 @@
 ## lab07
 *LAB* | *Name* | *Author*
 :---: | :---: | :---:|
-lab07_3 | [Dropout: A Simple Way to Prevent Neural Networks from Overfitting] (http://jmlr.org/papers/volume15/srivastava14a.old/srivastava14a.pdf) | Nitish Srivastava , Geoffrey Hinton, Alex Krizhevsky, Ilya Sutskever et al.
+lab07_3 | [Dropout: A Simple Way to Prevent Neural Networks from Overfitting](http://jmlr.org/papers/volume15/srivastava14a.old/srivastava14a.pdf) | Nitish Srivastava , Geoffrey Hinton, Alex Krizhevsky, Ilya Sutskever et al.
 lab07_4 | [Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift](https://arxiv.org/abs/1502.03167)    |Sergey Ioffe, Christian Szegedy
 
 ## lab09
