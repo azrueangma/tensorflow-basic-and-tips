@@ -8,7 +8,7 @@ tensorflow with deep learning
 ## Basic
 
 * [lab01] Basic regression
-> [lab01-1] linear regression 
+  + [lab01-1] linear regression 
 * [lab02] Basic classification 
 * [lab03] Usage of tensorboard
 * [lab04] Data manipulation
