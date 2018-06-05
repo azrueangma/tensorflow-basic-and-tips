@@ -1,4 +1,4 @@
-<p align="center"><img width="40%" src="basic/image/tensorflow_logo.jpeg" /></p>
+<p align="center"><img width="40%" src="Basic/image/tensorflow_logo.jpeg" /></p>
 
 --------------------------------------------------------------------------------
 
