@@ -4,7 +4,7 @@
 :---: | :---: | :---:|
 [Arxiv](https://arxiv.org/abs/1502.03167) | Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift |Sergey Ioffe, Christian Szegedy
 
-
+<!--
 ## regression
 
 lab01-1 | lab01-5
@@ -64,4 +64,4 @@ Sigmoid  (lab05_1) | <img src = 'image/lab05_1_results.PNG' height = '150px' wid
 lab08-1 and lab08-2 comparision
 :---: 
 <img src = 'image/lab08_learning_rate_decay_comparison.PNG' height = '200px' width = '1000px'> 
-
+-->
