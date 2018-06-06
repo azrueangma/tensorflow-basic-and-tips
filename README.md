@@ -51,7 +51,37 @@ tensorflow for deep learning
   + [lab06-4] optimizer adagrad
   + [lab06-5] optimizer rmsporp
   + [lab06-6] optimizer adam
-* ### [lab07] Regularization
+* ### [lab07] Regularization 
+  + [lab07-1] l1 regularization
+  + [lab07-2] l2 regularization
+  + [lab07-3] dropout
+  + [lab07-4] batch normalization
+  + [lab07-5] batch normalization and dropout
 * ### [lab08] CNN
+  + [lab08-0] mnist and cifar
+  + [lab08-1] cnn mnist base
+  + [lab08-2] cnn mnist learning rate decay
+  + [lab08-3] cnn mnist dropout
+  + [lab08-4] cnn mnist batch normalization
+  + [lab08-5] cnn mnist batch normalization and dropout
+  + [lab08-6] cnn mnist svm loss
+  + [lab08-7] cnn cifar base
+  + [lab08-8] cnn cifar batch normalization and dropout1
+  + [lab08-9] cnn cifar batch normalization and dropout2
+  + [lab08-X] cnn cifar batch normalization and dropout3
 * ### [lab09] RNN
+  + [lab09-1] rnn sequence labeling base
+  + [lab09-2] rnn sequence labeling LSTM
+  + [lab09-3] rnn sequence labeling peephole
+  + [lab09-4] rnn sequence labeling gradient clipping
+  + [lab09-5] rnn sequence labeling gradient normalization
+  + [lab09-6] rnn sequence labeling dropout
+  + [lab09-7] rnn sequence labeling stacked LSTM
+  + [lab09-8] rnn sequence labeling deep LSTM
 * ### [lab10] Some Techniques
+  + [lab10-1] model save
+  + [lab10-2] model restore
+  + [lab10-3] model flags 
+  + [lab10-4] model class
+  + [lab10-5] model decorator
+ 
