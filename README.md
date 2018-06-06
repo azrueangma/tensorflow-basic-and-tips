@@ -3,7 +3,7 @@
 --------------------------------------------------------------------------------
 
 # tensorflow-basic-and-advanced
-tensorflow with deep learning 
+tensorflow for deep learning 
 
 ## Basic
 
