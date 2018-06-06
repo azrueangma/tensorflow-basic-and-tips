@@ -84,4 +84,5 @@ tensorflow for deep learning
   + [lab10-3] model flags 
   + [lab10-4] model class
   + [lab10-5] model decorator
+  + [lab10-6] model packaging
  
