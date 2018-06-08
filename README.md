@@ -98,8 +98,10 @@ tensorflow for deep learning
 - [Danijar Hafner](https://danijar.com/)
 
 ### github
-- [Hwalsuk Lee](https://github.com/hwalsuklee)
-- [hunkim](https://github.com/hunkim/DeepLearningZeroToAll)
+*Name* | *Link*
+:---: | :---:
+Hwalsuk Lee | https://github.com/hwalsuklee
+hunkim | https://github.com/hunkim/DeepLearningZeroToAll
 
 ### book
 *No* |*Name* | *Author* | *Years*
