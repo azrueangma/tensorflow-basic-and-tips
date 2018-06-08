@@ -7,7 +7,7 @@ tensorflow for deep learning
 
 ## Basic
 
-* ### [lab01] Basic regression (01%20-%20Basic%20regression)
+* ### [lab01] [Basic regression](01%20-%20Basic%20regression)
   + [lab01-1] linear regression 
   + [lab01-2] linear regression get_variable
   + [lab01-3] linear regression using function
