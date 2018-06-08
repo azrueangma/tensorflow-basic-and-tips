@@ -101,7 +101,7 @@ tensorflow for deep learning
 - Hwalsuk Lee,  https://github.com/hwalsuklee
 - Sunghun Kim,  https://github.com/hunkim/DeepLearningZeroToAll
 
-### Site
+### site
 - Go Deep, http://www.godeep.ml/
 
 ### book
