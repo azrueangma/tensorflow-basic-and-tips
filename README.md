@@ -99,8 +99,10 @@ tensorflow for deep learning
 
 ### github
 - [Hwalsuk Lee](https://github.com/hwalsuklee)
+- [hunkim](https://github.com/hunkim/DeepLearningZeroToAll)
 
 ### book
-*N* |*Name* | *Author* | *Years*
+*No* |*Name* | *Author* | *Years*
 :---: | :---: | :---: | :---:
 1 | [TensorFlow for Machine Intelligence: A Hands-On Introduction to Learning Algorithms](https://www.amazon.com/TensorFlow-Machine-Intelligence-Hands-Introduction/dp/1939902452/ref=sr_1_3?ie=UTF8&qid=1528466174&sr=8-3&keywords=tensorflow+machine+intelligence)| Sam Abrahams  (Author), Danijar Hafner (Author), Erik Erwitt (Author), Ariel Scarpinelli | 2016
+2 |  
