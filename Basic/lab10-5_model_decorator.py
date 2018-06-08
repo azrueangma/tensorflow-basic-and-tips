@@ -232,3 +232,5 @@ class Model(object):
 
 m = Model(input_dim, nclass)
 m.fit(x_train, y_train, x_validation, y_validation)
+tl, ta = m.evaluate(x_test, y_test)
+print("Test loss : {:.6f} Test Accraucy : {:.2%}".format(tl / ntest, ta / ntest))
