@@ -5,6 +5,14 @@
 # tensorflow-basic-and-advanced
 tensorflow for deep learning 
 
+## Requirements
+
+- tensorFlow 
+- numpy
+- scipy
+- scikit-learn
+- matplotlib 
+    
 ## Basic
 
 * ### [lab01 Basic regression](01%20-%20Basic%20regression)
