@@ -95,3 +95,10 @@ tensorflow for deep learning
 
 ## References
 ### blog
+- [Danijar Hafner](https://danijar.com/)
+
+### github
+- [Hwalsuk Lee](https://github.com/hwalsuklee)
+
+### book
+- TensorFlow for Machine Intelligence: A Hands-On Introduction to Learning Algorithms
