@@ -20,11 +20,13 @@ flags.DEFINE_integer('total_epoch', 5, """number of train epochs""")
 
 if os.path.exists(FLAGS.board_path):
     shutil.rmtree(FLAGS.board_path)
+    os.mkdir(FLAGS.model_dir)
 else:
     os.mkdir(FLAGS.board_path)
 
 if os.path.exists(FLAGS.model_dir):
     shutil.rmtree(FLAGS.model_dir)
+    os.mkdir(FLAGS.model_dir)
 else:
     os.mkdir(FLAGS.model_dir)
 
