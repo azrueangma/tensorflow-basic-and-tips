@@ -9,7 +9,7 @@ flags = tf.app.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_integer('total_epoch', 100, "the number of train epochs")
 flags.DEFINE_integer('cpu_device', 0, 'the number of cpu device ')
-flags.DEFINE_string('board_path', "./board/lab01-7_board", "board directory")
+flags.DEFINE_string('board_path', "./board/lab01-8_board", "board directory")
 flags.DEFINE_string('model_path', "./model/", "model directory")
 
 if not os.path.exists(FLAGS.model_path):
@@ -53,22 +53,19 @@ with g.as_default(), tf.device('/cpu:{}'.format(FLAGS.cpu_device)):
         loss_scalar = tf.summary.scalar('loss_scalar', loss)
         merged = tf.summary.merge_all()
 
-    with tf.variable_scope("Writer"):
-        writer = tf.summary.FileWriter(FLAGS.board_path)
-
-    with tf.variable_scope("Saver"):
-        saver = tf.train.Saver()
+    writer = tf.summary.FileWriter(FLAGS.board_path)
+    saver = tf.train.Saver()
 
 
-with tf.Session(graph=g) as sess:
     init_op = tf.global_variables_initializer()
-    writer.add_graph(sess.graph)
-    sess.run(init_op)
+    with tf.Session(graph=g) as sess:
+        writer.add_graph(sess.graph)
+        sess.run(init_op)
 
-    for epoch in range(FLAGS.total_epoch):
-        m, l, W_val, b_val, _ = sess.run([merged, loss, W, b, train], feed_dict={X:x_train, Y:y_train})
-        writer.add_summary(m, global_step=epoch)
-        if (epoch+1) %10 == 0:
-            print("Epoch [{:3d}/{:3d}], loss = {:.6f}".format(epoch+1, FLAGS.total_epoch, l))
-            # save model per epoch
-            saver.save(sess, FLAGS.model_path + "my_model_{}/model".format(epoch+1))
+        for epoch in range(FLAGS.total_epoch):
+            m, l, W_val, b_val, _ = sess.run([merged, loss, W, b, train], feed_dict={X:x_train, Y:y_train})
+            writer.add_summary(m, global_step=epoch)
+            if (epoch+1) %10 == 0:
+                print("Epoch [{:3d}/{:3d}], loss = {:.6f}".format(epoch+1, FLAGS.total_epoch, l))
+                # save model per epoch
+                saver.save(sess, FLAGS.model_path + "my_model_{}/model".format(epoch+1))
