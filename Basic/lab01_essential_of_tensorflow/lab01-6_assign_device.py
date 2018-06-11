@@ -7,7 +7,7 @@ import shutil
 #constant
 TOTAL_EPOCH = 100
 CPU_DEVICE = 0
-BOARD_PATH = "./board/lab01-5_board"
+BOARD_PATH = "./board/lab01-6_board"
 if os.path.exists(BOARD_PATH):
     shutil.rmtree(BOARD_PATH)
 
@@ -46,33 +46,16 @@ with g.as_default(), tf.device('/cpu:{}'.format(CPU_DEVICE)):
         loss_scalar = tf.summary.scalar('loss_scalar', loss)
         merged = tf.summary.merge_all()
 
-    with tf.variable_scope("Writer"):
-        writer = tf.summary.FileWriter(BOARD_PATH)
+    writer = tf.summary.FileWriter(BOARD_PATH)
 
 
-with tf.Session(graph=g) as sess:
     init_op = tf.global_variables_initializer()
-    writer.add_graph(sess.graph)
-    sess.run(init_op)
+    with tf.Session(graph=g) as sess:
+        writer.add_graph(sess.graph)
+        sess.run(init_op)
 
-    print(X)
-    print(Y)
-    print(W)
-    print(b)
-    print(output)
-    print(loss)
-
-    for epoch in range(TOTAL_EPOCH):
-        m, l, W_val, b_val, _ = sess.run([merged, loss, W, b, train], feed_dict={X:x_train, Y:y_train})
-        writer.add_summary(m, global_step=epoch)
-        if (epoch+1)%10 == 0:
-            print("Epoch [{:3d}/{:3d}], loss = {:.6f}".format(epoch + 1, TOTAL_EPOCH, l))
-
-'''
-Tensor("Inputs/X:0", shape=(?, 1), dtype=float32, device=/device:CPU:0)
-Tensor("Inputs/Y:0", shape=(?, 1), dtype=float32, device=/device:CPU:0)
-<tf.Variable 'Weight_and_Bias/W:0' shape=(1,) dtype=float32_ref>
-<tf.Variable 'Weight_and_Bias/b:0' shape=(1,) dtype=float32_ref>
-Tensor("Output/output:0", shape=(?, 1), dtype=float32, device=/device:CPU:0)
-Tensor("Loss/loss:0", shape=(), dtype=float32, device=/device:CPU:0)
-'''
+        for epoch in range(TOTAL_EPOCH):
+            m, l, W_val, b_val, _ = sess.run([merged, loss, W, b, train], feed_dict={X:x_train, Y:y_train})
+            writer.add_summary(m, global_step=epoch)
+            if (epoch+1)%10 == 0:
+                print("Epoch [{:3d}/{:3d}], loss = {:.6f}".format(epoch + 1, TOTAL_EPOCH, l))
