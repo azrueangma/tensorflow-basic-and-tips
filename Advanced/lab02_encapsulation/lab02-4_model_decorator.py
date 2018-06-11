@@ -59,6 +59,7 @@ class Model(object):
             self.saver
             self.merged
 
+            
     def _build_model(self):
         with tf.variable_scope("Inputs"):
             #create placeholder for input
