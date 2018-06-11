@@ -29,14 +29,13 @@ with g.as_default():
     train = optimizer.minimize(loss)
 
 
-with tf.Session(graph=g) as sess:
     init_op = tf.global_variables_initializer()
-    sess.run(init_op)
-
-    for epoch in range(TOTAL_EPOCH):
-        l, W_val, b_val, _ = sess.run([loss, W, b, train], feed_dict={X:x_train, Y:y_train})
-        if (epoch+1)%10 == 0:
-            print("Epoch [{:3d}/{:3d}], loss = {:.6f}".format(epoch + 1, TOTAL_EPOCH, l))
+    with tf.Session(graph=g) as sess:
+        sess.run(init_op)
+        for epoch in range(TOTAL_EPOCH):
+            l, W_val, b_val, _ = sess.run([loss, W, b, train], feed_dict={X:x_train, Y:y_train})
+            if (epoch+1)%10 == 0:
+                print("Epoch [{:3d}/{:3d}], loss = {:.6f}".format(epoch + 1, TOTAL_EPOCH, l))
 
 
 '''
