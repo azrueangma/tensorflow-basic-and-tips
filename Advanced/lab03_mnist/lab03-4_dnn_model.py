@@ -31,9 +31,9 @@ class Model(object):
         self.seed = seed
         with self.graph.as_default(), self.graph.device('/cpu:{}'.format(FLAGS.cpu_device)):
             tf.set_random_seed(self.seed)
-            self.train_queue
             self.test_queue
-            self.input
+            self.train_queue
+            self.test_select
             self._build_model()
             self.loss
             self.predict
@@ -47,8 +47,8 @@ class Model(object):
     def _build_model(self):
         with tf.variable_scope("Inputs"):
             #create placeholder for input
-            self.X = self.input[0]
-            self.Y = self.input[1]
+            self.use_test_set = tf.placeholder(tf.bool, name='use_test_set')
+            [self.X, self.Y] = tf.cond(tf.equal(self.use_test_set, tf.constant(True)), lambda:self.test_select, lambda:self.train_queue)
             self.Y_one_hot = tf.reshape(tf.one_hot(self.Y, FLAGS.nclass), [-1, FLAGS.nclass], name='Y_one_hot')
 
             self.learning_rate = tf.placeholder(tf.float32, name='learning_rate')
@@ -102,7 +102,6 @@ class Model(object):
         self.avg_acc_scalar = tf.summary.scalar('acc_scalar', self.avg_acc)
         return tf.summary.merge_all()
 
-
     @lazy_property
     def train_queue(self):
         filename = os.path.join(FLAGS.data_path, "train.tfrecords")
@@ -125,7 +124,7 @@ class Model(object):
         label = tf.reshape(label, [1])
         images_batch, labels_batch = tf.train.shuffle_batch([image, label], batch_size=FLAGS.batch_size,
                                                             capacity=2000, min_after_dequeue=1000)
-        return [images_batch, labels_batch]
+        return images_batch, labels_batch
 
 
     @lazy_property
@@ -149,8 +148,7 @@ class Model(object):
         label = tf.cast(features['label'], tf.int32)
         label = tf.reshape(label, [1])
         images_batch, labels_batch = tf.train.batch([image, label], batch_size=FLAGS.batch_size, allow_smaller_final_batch=True)
-        return [images_batch, labels_batch]
-
+        return images_batch, labels_batch
 
     @lazy_property
     def test_queue(self):
@@ -172,25 +170,21 @@ class Model(object):
         image.set_shape([784])
         label = tf.cast(features['label'], tf.int32)
         label = tf.reshape(label, [1])
-        images_batch, labels_batch = tf.train.batch([image, label], batch_size=FLAGS.batch_size, allow_smaller_final_batch=True)
-        return [images_batch, labels_batch]
+        images_batch, labels_batch = tf.train.batch([image, label], batch_size=self.n_test)
+        return images_batch, labels_batch
 
 
     @lazy_property
-    def input(self):
-        self.use_placeholder = tf.placeholder(tf.bool)
-        self.use_testset = tf.placeholder(tf.bool)
+    def test_select(self):
+        self.use_placeholder = tf.placeholder(tf.bool, name='use_placeholder')
+        return tf.cond(tf.equal(self.use_placeholder, tf.constant(True)), self.external_input_placeholder,
+                       lambda: self.test_queue)
+
+
+    def external_input_placeholder(self):
         self.X2 = tf.placeholder(dtype=tf.float32, shape=[None, 784], name='X2')
-        self.Y2 = tf.placeholder(dtype=tf.float32, shape=[None, 1], name='Y2')
-        cond = tf.cond(tf.equal(self.use_placeholder, tf.constant(True)), lambda:tf.constant(1), lambda:tf.constant(0))
-        cond2 = tf.cond(tf.equal(self.use_testset, tf.constant(True)), lambda: tf.constant(1), lambda: tf.constant(0))
-        if cond == 1:
-            return [self.X2, self.Y2]
-        else:
-            if cond2 == 1:
-                return self.test_queue
-            else:
-                return self.train_queue
+        self.Y2 = tf.placeholder(dtype=tf.int32, shape=[None, 1], name='Y2')
+        return self.X2, self.Y2
 
 
     def fit(self, model_reuse=False):
@@ -213,7 +207,8 @@ class Model(object):
                 loss_per_loss = 0
                 loss_per_acc = 0
                 for step in range(total_steps):
-                    l, a, _ = sess.run([self.loss, self.accuracy, self.optim], feed_dict={self.learning_rate:FLAGS.learning_rate})
+                    l, a, _ = sess.run([self.loss, self.accuracy, self.optim],
+                                       feed_dict={self.use_test_set:False, self.use_placeholder:False, self.learning_rate:FLAGS.learning_rate})
                     loss_per_loss+=l/total_steps
                     loss_per_acc+=a/total_steps
 
@@ -225,15 +220,14 @@ class Model(object):
                     # save model per epoch
                     self.saver.save(sess, FLAGS.model_path+"mnist_dnn.ckpt", global_step=self.global_step)
 
+            '''
             test_total_steps = int(self.n_test/FLAGS.batch_size)+1
             test_loss = 0
             test_acc = 0
-            for step in range(test_total_steps):
-                l, a = sess.run([self.loss, self.accuracy], feed_dict={self.use_testset:True})
-                test_loss+=l/test_total_steps
-                test_acc+=a/test_total_steps
+            '''
+            l, a = sess.run([self.loss, self.accuracy], feed_dict={self.use_test_set:True, self.use_placeholder:False})
 
-            print("Test accuracy : {:.2%}, loss : {:.6f}".format(test_acc, test_loss))
+            print("Test accuracy : {:.2%}, loss : {:.6f}".format(a/self.n_test, l/self.n_test))
 
             coord.request_stop()
             coord.join(threads)
