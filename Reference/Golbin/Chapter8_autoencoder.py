@@ -2,8 +2,10 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 from load_mnist import save_and_load_mnist
+import shutil
 
 dataset = save_and_load_mnist("./data/mnist/")
+reuse_model = False
 
 x_train = dataset['train_data']
 y_train = dataset['train_target']
@@ -14,12 +16,18 @@ global_step = tf.Variable(0, trainable=False, name='global_step')
 
 X = tf.placeholder(dtype=tf.float32, shape=[None, 784], name='X')
 
-W_encode = tf.get_variable(name='W_encode', shape=[784, 256], initializer=tf.glorot_uniform_initializer())
-b_encode = tf.get_variable(name='b_encode', shape=[256], initializer=tf.zeros_initializer())
-encoder = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(X, W_encode), b_encode), name='encoder')
+with tf.variable_scope("encoder") as scope:
+    W_encode = tf.get_variable(name='W_encode', shape=[784, 256], initializer=tf.glorot_uniform_initializer())
+    b_encode = tf.get_variable(name='b_encode', shape=[256], initializer=tf.zeros_initializer())
+    encoder = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(X, W_encode), b_encode), name='encoder')
 
-W_decode = tf.get_variable(name='W_decode', shape=[256, 784], initializer=tf.glorot_uniform_initializer())
-b_decode = tf.get_variable(name='b_decode', shape=[784], initializer=tf.zeros_initializer())
+#골빈의 코드에서 이 부분이 잘못되었다. 
+#decoder에 사용되는 weight는 encoder에서 사용되는 weight의 transpose형태여야 한다. 
+with tf.variable_scope("decoder") as scope:
+    b_decode = tf.get_variable(name='b_decode', shape=[784], initializer=tf.zeros_initializer())
+    scope.reuse_variables()
+    W_decode = tf.transpose(W_encode, name='W_decode')
+
 decoder = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(encoder, W_decode), b_decode), name='decoder')
 
 cost = tf.reduce_mean(tf.square(X-decoder), name='cost')
@@ -27,12 +35,14 @@ optimizer = tf.train.AdamOptimizer(learning_rate=0.01)
 train_op = optimizer.minimize(cost, global_step=global_step)
 
 
-total_epochs = 1
+total_epochs = 10
 batch_size = 32
 total_steps = int(len(x_train)/batch_size)
 print(">>> Training Start [total epochs : {}, total step : {}]".format(total_epochs, total_steps))
 with tf.Session() as sess:
     saver = tf.train.Saver(tf.global_variables())
+    if not reuse_model:
+        shutil.rmtree('./model8')
     ckpt = tf.train.get_checkpoint_state('./model8')
     if ckpt and tf.train.checkpoint_exists(ckpt.model_checkpoint_path):
         saver.restore(sess, ckpt.model_checkpoint_path)
@@ -52,7 +62,7 @@ with tf.Session() as sess:
             loss_per_epoch += c/total_steps
 
         print("Global Step : {:5d}, Epoch : [{:3d}/{:3d}], cost : {:.6f}"
-              .format(sess.run(global_step), epoch, total_epochs, loss_per_epoch))
+              .format(sess.run(global_step), epoch+1, total_epochs, loss_per_epoch))
 
         saver.save(sess, "./model8/dnn.ckpt", global_step=global_step)
 
