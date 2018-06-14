@@ -16,16 +16,13 @@ global_step = tf.Variable(0, trainable=False, name='global_step')
 
 X = tf.placeholder(dtype=tf.float32, shape=[None, 784], name='X')
 
-with tf.variable_scope("encoder") as scope:
+with tf.variable_scope("encoder"):
     W_encode = tf.get_variable(name='W_encode', shape=[784, 256], initializer=tf.glorot_uniform_initializer())
     b_encode = tf.get_variable(name='b_encode', shape=[256], initializer=tf.zeros_initializer())
     encoder = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(X, W_encode), b_encode), name='encoder')
 
-#골빈의 코드에서 이 부분이 잘못되었다. 
-#decoder에 사용되는 weight는 encoder에서 사용되는 weight의 transpose형태여야 한다. 
-with tf.variable_scope("decoder") as scope:
+with tf.variable_scope("decoder"):
     b_decode = tf.get_variable(name='b_decode', shape=[784], initializer=tf.zeros_initializer())
-    scope.reuse_variables()
     W_decode = tf.transpose(W_encode, name='W_decode')
 
 decoder = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(encoder, W_decode), b_decode), name='decoder')
@@ -33,7 +30,6 @@ decoder = tf.nn.sigmoid(tf.nn.bias_add(tf.matmul(encoder, W_decode), b_decode), 
 cost = tf.reduce_mean(tf.square(X-decoder), name='cost')
 optimizer = tf.train.AdamOptimizer(learning_rate=0.01)
 train_op = optimizer.minimize(cost, global_step=global_step)
-
 
 total_epochs = 10
 batch_size = 32
