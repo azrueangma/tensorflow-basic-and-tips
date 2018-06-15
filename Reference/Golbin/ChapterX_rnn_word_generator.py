@@ -166,6 +166,3 @@ m.evaluate(input_batch, target_batch)
 정확도 : 100.00%
 
 '''
-
-
-
