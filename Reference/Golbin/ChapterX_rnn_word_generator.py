@@ -8,7 +8,6 @@ char_arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
             'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
             'q','r','s','t','u','v','w','x','y','z']
 
-
 num_dic = {n:i for i, n in enumerate(char_arr)}
 dic_len = len(num_dic)
 
@@ -25,6 +24,7 @@ def make_batch(seq_data):
         input_batch.append(np.eye(dic_len)[input])
         target_batch.append(target)
     return input_batch, target_batch
+
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
