@@ -27,7 +27,6 @@ if not os.path.exists(FLAGS.board_path):
 else:
     shutil.rmtree(FLAGS.board_path)
 
-
 dataset = save_and_load_mnist("./data/mnist/")
 
 x_train = dataset['train_data']
