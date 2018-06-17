@@ -48,8 +48,11 @@ else:
 
 
 class Model(object):
-    def __init__(self, sess):
+    def __init__(self, sess, seq_data, char_arr):
         self.sess = sess
+        self.seq_data = seq_data
+        self.char_arr = char_arr
+        self._set_dataset()
         self._set_params()
         self._build_net()
         self.logits
@@ -59,6 +62,10 @@ class Model(object):
 
     def _set_params(self):
         self.global_step = tf.Variable(0, trainable=False, name='global_step')
+
+
+    def _set_dataset(self):
+        self.input_batch, self.output_batch, self.target_batch = make_batch(self.seq_data)
 
 
     def _build_net(self):
@@ -81,9 +88,7 @@ class Model(object):
 
     @lazy_property
     def logits(self):
-        W = tf.get_variable(name='W', shape=[FLAGS.dim_hidden, FLAGS.n_class], initializer=tf.glorot_uniform_initializer())
-        b = tf.get_variable(name='b', shape=[FLAGS.n_class], initializer=tf.zeros_initializer())
-        return tf.nn.bias_add(tf.matmul(self.outputs, W), b, name='logits')
+        return tf.layers.dense(self.outputs, FLAGS.n_class, activation=None)
 
 
     @lazy_property
@@ -96,7 +101,7 @@ class Model(object):
         return tf.train.AdamOptimizer(learning_rate=FLAGS.learning_rate).minimize(self.cost, global_step=self.global_step)
 
 
-    def train(self, input_batch, output_batch, target_batch, reuse_model=False):
+    def train(self, reuse_model=False):
         saver = tf.train.Saver(tf.global_variables())
         writer = tf.summary.FileWriter(FLAGS.board_path, self.sess.graph)
         if not reuse_model:
@@ -109,17 +114,52 @@ class Model(object):
 
         for epoch in range(FLAGS.total_epoch):
             l, _ = self.sess.run([self.cost, self.optimizer],
-                                 feed_dict={self.enc_input: input_batch,
-                                            self.dec_input: output_batch,
-                                            self.targets: target_batch})
+                                 feed_dict={self.enc_input: self.input_batch,
+                                            self.dec_input: self.output_batch,
+                                            self.targets: self.target_batch,
+                                            self.keep_prob: 0.5})
 
-            print("Global_step : {:4d}, Epoch : {:4d}, Cost : {:6.f}".format(self.global_step, epoch+1, l))
+            print("Global_step : {:4d}, Epoch : {:4d}, Cost : {:.6f}".format(self.sess.run(self.global_step), epoch+1, l))
 
         print("Training Done")
 
 
-input_batch, output_batch, target_batch = make_batch(seq_data)
-g = tf.Graph()
-sess = tf.Session(graph=g)
-m = Model(sess)
-m.train(input_batch, output_batch, target_batch)
+    def translate(self, word):
+        seq_data = [word, 'P'*len(word)]
+        input_batch, output_batch, target_batch = make_batch([seq_data])
+        prediction = tf.argmax(self.logits, axis=2)
+        result = self.sess.run(prediction, feed_dict={self.enc_input: input_batch,
+                                                      self.dec_input: output_batch,
+                                                      self.targets: target_batch,
+                                                      self.keep_prob: 1.0})
+
+        decoded = [self.char_arr[i] for i in result[0]]
+        if not 'E' in decoded:
+            return 'None'
+        end = decoded.index('E')
+        translated = ''.join(decoded[:end])
+        return translated
+
+
+    def test(self, word_list):
+        print("\n=== Translation Test ===")
+        for i in  word_list:
+            print("{} -> {}".format(i, self.translate(i)))
+
+
+sess = tf.Session()
+m = Model(sess, seq_data, char_arr)
+m.train()
+m.test(['word', 'wood', 'game', 'kiss', 'girl', 'love', 'abcd'])
+
+
+'''
+=== Translation Test ===
+word -> 단어
+wood -> 나무
+game -> 놀이
+kiss -> 키스
+girl -> 소녀
+love -> 사랑
+abcd -> None
+'''
