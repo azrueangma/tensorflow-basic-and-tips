@@ -59,7 +59,6 @@ def my_model2(input_op):
 
 X = tf.constant(x_train, dtype=tf.float32)
 
-
 #Step 1 tf.Variable
 W11, W12 = my_model1(X)
 sess = tf.Session()
