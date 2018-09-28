@@ -77,3 +77,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+'''
+usage
+
+python lab01-x_argparse.py 100 0 './board/'
+'''
