@@ -36,7 +36,7 @@ def get_loss(output, Y_op, name):
     with tf.variable_scope(name):
         loss = tf.reduce_mean(tf.square(Y_op - output), name='loss')
     return loss
-
+ 
 
 def get_optim(loss, learning_rate, name):
     with tf.variable_scope(name):
